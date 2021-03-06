@@ -3,7 +3,11 @@ class Stock {
   int timestamp;
   double currentMarketPrice;
 
-  Stock({this.symbol, this.timestamp, this.currentMarketPrice});
+  Stock(String symbol, int timestamp, double currentMarketPrice) {
+    this.symbol = symbol;
+    this.timestamp = timestamp;
+    this.currentMarketPrice = currentMarketPrice;
+  }
 
   String getSymbol() {
     return this.symbol;

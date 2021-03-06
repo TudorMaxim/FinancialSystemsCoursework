@@ -3,7 +3,9 @@ import 'Stock.dart';
 class Formulae {
   List<Stock> stocks;
 
-  Formulae({this.stocks});
+  Formulae(List<Stock> stocks) {
+    this.stocks = stocks;
+  }
 
   List<Stock> getStocks() {
     return this.stocks;
