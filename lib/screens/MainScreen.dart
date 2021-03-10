@@ -25,7 +25,6 @@ class MainScreenState extends AppBaseState<MainScreen> {
     if(_ticker != null && _dates != null) {
       String _startStamp = (_dates.first.millisecondsSinceEpoch ~/ 1000).toString();
       String _endStamp = (_dates.last.millisecondsSinceEpoch ~/ 1000).toString();
-      debugPrint('$_startStamp - $_endStamp');
       List<Stock> _stocks = await StockDataCollector.getPrices(_ticker.trim(), _startStamp, _endStamp);
       Navigator.of(context).push(
         MaterialPageRoute(
@@ -88,17 +87,31 @@ class MainScreenState extends AppBaseState<MainScreen> {
   }
 }
 
-class TickerSelectForm extends StatelessWidget {
+class TickerSelectForm extends StatefulWidget {
   final Function _handleTickerSubmit;
 
   TickerSelectForm(this._handleTickerSubmit);
+
+  @override
+  _TickerSelectFormState createState() => _TickerSelectFormState();
+}
+
+class _TickerSelectFormState extends State<TickerSelectForm> {
+  final TextEditingController _ctr = TextEditingController();
+  String _ticker = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _ctr.text = _ticker;
+  }
 
   _onSuggestionSelected(String suggestion, BuildContext context) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text('Ticker $suggestion selected'),
       duration: Duration(seconds: 2),
     ));
-    _handleTickerSubmit(suggestion);
+    widget._handleTickerSubmit(suggestion);
   }
 
   @override
@@ -112,7 +125,9 @@ class TickerSelectForm extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           final List<String> _tickers = snapshot.data;
           return TypeAheadField(
+
             textFieldConfiguration: TextFieldConfiguration(
+              controller: _ctr,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Ticker'
@@ -123,8 +138,11 @@ class TickerSelectForm extends StatelessWidget {
             itemBuilder: (context, suggestion) => ListTile(
               title: Text(suggestion),
             ),
-            onSuggestionSelected: (suggestion) =>
-                _onSuggestionSelected(suggestion, context),
+            onSuggestionSelected: (suggestion) {
+              _ticker = suggestion;
+              _ctr.text = suggestion;
+              _onSuggestionSelected(suggestion, context);
+            },
           );
         } else {
           return CircularProgressIndicator();
