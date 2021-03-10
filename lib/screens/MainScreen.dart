@@ -29,7 +29,7 @@ class MainScreenState extends AppBaseState<MainScreen> {
         centerTitle: true,
         bottom: PreferredSize(
           child: Text(getConnectionString(), style: TextStyle(color: Colors.red),),
-          preferredSize: null,
+          preferredSize: Size.fromHeight(0),
         ),
       ),
       body: renderWithLoader(this.body()),
