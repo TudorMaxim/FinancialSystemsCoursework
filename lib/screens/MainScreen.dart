@@ -22,22 +22,23 @@ class MainScreenState extends AppBaseState<MainScreen> {
   List<DateTime> _dates;
 
   void handlePress(BuildContext context) async {
-    if(_ticker != null && _dates != null) {
-      String _startStamp = (_dates.first.millisecondsSinceEpoch ~/ 1000).toString();
-      String _endStamp = (_dates.last.millisecondsSinceEpoch ~/ 1000).toString();
-      List<Stock> _stocks = await StockDataCollector.getPrices(_ticker.trim(), _startStamp, _endStamp);
+    if (_ticker != null && _dates != null) {
+      String _startStamp =
+          (_dates.first.millisecondsSinceEpoch ~/ 1000).toString();
+      String _endStamp =
+          (_dates.last.millisecondsSinceEpoch ~/ 1000).toString();
+      List<Stock> _stocks = await StockDataCollector.getPrices(
+          _ticker.trim(), _startStamp, _endStamp);
       Navigator.of(context).push(
         MaterialPageRoute(
             builder: (context) =>
-                DetailsScreen(
-                  title: 'Stock Details',
-                  stocks: _stocks
-                )),
+                DetailsScreen(title: 'Stock Details', stocks: _stocks)),
       );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Please select ticker and date range'),
-          duration: Duration(seconds: 2),));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Please select ticker and date range'),
+        duration: Duration(seconds: 2),
+      ));
     }
   }
 
@@ -48,9 +49,9 @@ class MainScreenState extends AppBaseState<MainScreen> {
   }
 
   _handleDateSubmit(List<DateTime> dates) {
-  this.setState(() {
-    _dates = dates;
-  });
+    this.setState(() {
+      _dates = dates;
+    });
   }
 
   @override
@@ -72,7 +73,9 @@ class MainScreenState extends AppBaseState<MainScreen> {
         child: Column(
           children: [
             TickerSelectForm(_handleTickerSubmit),
-            Divider(height: 12.0,),
+            Divider(
+              height: 12.0,
+            ),
             DateRangeSelector(_handleDateSubmit),
           ],
           mainAxisAlignment: MainAxisAlignment.center,
@@ -125,14 +128,10 @@ class _TickerSelectFormState extends State<TickerSelectForm> {
         if (snapshot.connectionState == ConnectionState.done) {
           final List<String> _tickers = snapshot.data;
           return TypeAheadField(
-
             textFieldConfiguration: TextFieldConfiguration(
-              controller: _ctr,
+                controller: _ctr,
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Ticker'
-                )
-            ),
+                    border: OutlineInputBorder(), labelText: 'Ticker')),
             suggestionsCallback: (pattern) =>
                 TickerManager().filterSuggestions(pattern, _tickers),
             itemBuilder: (context, suggestion) => ListTile(
@@ -157,7 +156,8 @@ class DateRangeSelector extends StatefulWidget {
   DateRangeSelector(this._handleDateSubmit);
 
   @override
-  _DateRangeSelectorState createState() => _DateRangeSelectorState(_handleDateSubmit);
+  _DateRangeSelectorState createState() =>
+      _DateRangeSelectorState(_handleDateSubmit);
 }
 
 class _DateRangeSelectorState extends State<DateRangeSelector> {
@@ -176,56 +176,73 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
   void _handleDateAlertSubmit(BuildContext context) {
     Navigator.of(context).pop();
     if (_dates != null && _dates.first != null && _dates.last != null) {
-      _handleDateSubmit(_dates);
+      if (_dates.last
+              .difference(_dates.first)
+              .compareTo(Duration(days: 365 * 2)) ==
+          1) {
+        debugPrint('Range larger than 2 years selected!');
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Please select a range of two years or less.'),
+          duration: Duration(seconds: 2),
+        ));
+      } else {
+        _handleDateSubmit(_dates);
+      }
     } else {
       debugPrint('Incorrect dates selected');
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:
-      Text('Please select a valid date range!')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Please select a valid date range!'),
+        duration: Duration(seconds: 2),
+      ));
     }
   }
 
   PickerDateRange _getInitRange() {
-    if(_dates != null && _dates.first != null && _dates.last != null) {
+    if (_dates != null && _dates.first != null && _dates.last != null) {
       return PickerDateRange(_dates.first, _dates.last);
     } else {
-      return PickerDateRange(DateTime.now().subtract(Duration(days: 5)),
-          DateTime.now());
+      return PickerDateRange(
+          DateTime.now().subtract(Duration(days: 5)), DateTime.now());
     }
   }
 
   void _onShowDialog(BuildContext context) {
-    showDialog(context: context, builder: (context) {
-      return AlertDialog(
-        title: Text('Pick date range'),
-        content: Container(
-          width: MediaQuery.of(context).size.width - 10,
-          height: MediaQuery.of(context).size.height / 2,
-          child: SfDateRangePicker(
-            selectionMode: DateRangePickerSelectionMode.range,
-            onSelectionChanged: _onSelectionChanged,
-            minDate: DateTime.now().subtract(Duration(days: 365 * 5)),
-            maxDate: DateTime.now(),
-            initialSelectedRange: _getInitRange(),
-          ),
-        ) ,
-        actions: [
-          TextButton(onPressed: () => Navigator.of(context).pop(),
-              child: Text('CANCEL')),
-          TextButton(onPressed: () => _handleDateAlertSubmit(context),
-              child: Text('OK'))
-        ],
-        elevation: 24.0,
-      );
-    });
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Pick date range'),
+            content: Container(
+              width: MediaQuery.of(context).size.width - 10,
+              height: MediaQuery.of(context).size.height / 2,
+              child: SfDateRangePicker(
+                selectionMode: DateRangePickerSelectionMode.range,
+                onSelectionChanged: _onSelectionChanged,
+                minDate: DateTime.now().subtract(Duration(days: 365 * 5)),
+                maxDate: DateTime.now(),
+                initialSelectedRange: _getInitRange(),
+              ),
+            ),
+            actions: [
+              TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text('CANCEL')),
+              TextButton(
+                  onPressed: () => _handleDateAlertSubmit(context),
+                  child: Text('OK'))
+            ],
+            elevation: 24.0,
+          );
+        });
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: ElevatedButton(onPressed: () => _onShowDialog(context),
-          child: Text('Pick Date Range'),
+      child: ElevatedButton(
+        onPressed: () => _onShowDialog(context),
+        child: Text('Pick Date Range'),
       ),
-
     );
   }
 }
