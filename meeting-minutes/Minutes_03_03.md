@@ -2,7 +2,7 @@
 
 ## Date: 03/03/2021
 ## Attendees:
-- Moisi Teofoana ✔
+- Moisi Teofana ✔
 - Balamurai, Thishaan ✔
 - Maxim Tudor ✔
 - Pavel Simon Horia Tudor ✔
@@ -17,7 +17,7 @@
 - Data persistence
 
 ## Action Points for next week
-- Moisi Teofoana ➡ Data model & formulae
+- Moisi Teofana ➡ Data model & formulae
 - Balamurai, Thishaan ➡ Formulae
 - Maxim Tudor ➡ Graph functionality and graph screen + library integration
 - Pavel Simon Horia Tudor ➡ Data fetch & formulae

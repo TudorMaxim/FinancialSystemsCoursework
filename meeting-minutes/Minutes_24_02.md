@@ -2,7 +2,7 @@
 
 ## Date: 24/02/2021
 ## Attendees:
-- Moisi Teofoana ✔
+- Moisi Teofana ✔
 - Balamurai, Thishaan ✔
 - Maxim Tudor ✔
 - Pavel Simon Horia Tudor ✔
@@ -16,7 +16,7 @@
 - Inital Task Allocation
 
 ## Action Points for next week
-- Moisi Teofoana ➡ UML Diagrams
+- Moisi Teofana ➡ UML Diagrams
 - Balamurai, Thishaan ➡ UML Diagrams
 - Maxim Tudor ➡ Github repo setup, Flutter boilerplate
 - Pavel Simon Horia Tudor ➡ UI Scaffolding
