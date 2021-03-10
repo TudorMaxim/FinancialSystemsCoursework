@@ -73,7 +73,7 @@ class DetailsScreenState extends AppBaseState<DetailsScreen> {
         ],
         bottom: PreferredSize(
           child: Text(getConnectionString(), style: TextStyle(color: Colors.red),),
-          preferredSize: null,
+          preferredSize: Size.fromHeight(0),
         ),
       ),
       body: renderWithLoader(this.body()),
