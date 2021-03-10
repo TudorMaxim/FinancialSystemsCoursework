@@ -1,10 +1,12 @@
 import 'package:financial_systems_coursework/model/GraphType.dart';
 import 'package:financial_systems_coursework/shared/AppBaseState.dart';
+import 'package:financial_systems_coursework/model/Stock.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DetailsScreen extends StatefulWidget {
   final String title;
+  final List<Stock> stocks;
   final List<GraphType> graphTypes = [
     GraphType(name: 'Price data', defaultSelected: true),
     GraphType(name: 'SMA', defaultSelected: true),
@@ -13,7 +15,7 @@ class DetailsScreen extends StatefulWidget {
     GraphType(name: 'MACDAVG', defaultSelected: false),
   ];
 
-  DetailsScreen({Key key, this.title}): super(key: key);
+  DetailsScreen({Key key, this.title, this.stocks}): super(key: key);
 
   @override
   State<StatefulWidget> createState() => DetailsScreenState();
