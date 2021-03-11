@@ -2,7 +2,7 @@
 
 ## Date: 
 ## Attendees:
-- Moisi Teofoana ✔ ❌
+- Moisi Teofana ✔ ❌
 - Balamurai, Thishaan ✔ ❌
 - Maxim Tudor ✔ ❌ 
 - Pavel Simon Horia Tudor ✔ ❌
@@ -16,7 +16,7 @@
 -
 
 ## Action Points for next week
-- Moisi Teofoana ➡
+- Moisi Teofana ➡
 - Balamurai, Thishaan ➡
 - Maxim Tudor ➡ 
 - Pavel Simon Horia Tudor ➡ 
