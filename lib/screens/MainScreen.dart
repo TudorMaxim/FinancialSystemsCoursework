@@ -47,7 +47,7 @@ class MainScreenState extends AppBaseState<MainScreen> {
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Please select ticker and date range'),
+        content: Text('Please select ticker and valid date range'),
         duration: Duration(seconds: 2),
       ));
     }
@@ -203,6 +203,7 @@ class DateRangeSelector extends StatefulWidget {
 class _DateRangeSelectorState extends State<DateRangeSelector> {
   final Function _handleDateSubmit;
   List<DateTime> _dates;
+  bool _err = false;
 
   _DateRangeSelectorState(this._dates, this._handleDateSubmit);
 
@@ -223,19 +224,22 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
               .compareTo(Duration(days: 365 * 2)) ==
           1) {
         debugPrint('Range larger than 2 years selected!');
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('Please select a range of two years or less.'),
-          duration: Duration(seconds: 2),
-        ));
+        this.setState(() {
+          _err = true;
+          _handleDateSubmit(null);
+        });
       } else {
-        _handleDateSubmit(_dates);
+        this.setState(() {
+          _handleDateSubmit(_dates);
+          _err = false;
+        });
       }
     } else {
       debugPrint('Incorrect dates selected');
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Please select a valid date range!'),
-        duration: Duration(seconds: 2),
-      ));
+      this.setState(() {
+        _err = true;
+        _handleDateSubmit(null);
+      });
     }
   }
 
@@ -272,6 +276,7 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
 
   @override
   Widget build(BuildContext context) {
+    final int _durr = _dates.last.difference(_dates.first).inDays;
     return Container(
       child: Column(
         children: [
@@ -294,6 +299,27 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
             padding:
                 const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
             child: Text('End: ${DateFormat.yMd().format(_dates.last)}'),
+          ),
+          VerticalDivider(
+            width: 12.0,
+          ),
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+            child: Text('$_durr days currently selected'),
+          ),
+          VerticalDivider(
+            width: 12.0,
+          ),
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+            child: Text(
+              _err
+                  ? 'Please select a valid date range!\n(less then two years)'
+                  : '',
+              style: TextStyle(color: Colors.red),
+            ),
           )
         ],
         crossAxisAlignment: CrossAxisAlignment.start,
