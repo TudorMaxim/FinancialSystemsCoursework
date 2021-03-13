@@ -10,18 +10,16 @@ class TickerManager {
     return _instance;
   }
 
-  List<String> flattenTickers(List<List<dynamic>> tickers) {
-    List<String> res = [];
-    tickers.forEach((innerL) {
-      innerL.forEach((element) {
-        if(element is String) {
-          res.add(element);
-        } else {
-          throw('Error - A non string entity was parsed in the tickers csv');
-        }
-      });
-    });
-    return res;
+  String _processTicker(String t) {
+    return t.replaceAll(',', '').trim();
+  }
+
+  List<String> _flattenTickers(List<List<dynamic>> tickers) {
+    if (tickers.first.length == 1) {
+      return tickers.map((l) => _processTicker(l.first.toString())).toList();
+    } else {
+      return tickers.first.map((s) => _processTicker(s)).toList();
+    }
   }
 
   Future<List<String>> get tickers async {
@@ -29,7 +27,7 @@ class TickerManager {
         await rootBundle.loadString('assets/tickers.csv');
     final List<List<dynamic>> _csvData =
         CsvToListConverter().convert(_tickerString);
-    return flattenTickers(_csvData);
+    return _flattenTickers(_csvData);
   }
 
   List<String> filterSuggestions(String pattern, List<String> tickers) {

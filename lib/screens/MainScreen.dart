@@ -4,6 +4,7 @@ import 'package:financial_systems_coursework/shared/AppBaseState.dart';
 import 'package:financial_systems_coursework/repository/TickerManager.dart';
 import 'package:financial_systems_coursework/model/Stock.dart';
 
+import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -21,8 +22,18 @@ class MainScreenState extends AppBaseState<MainScreen> {
   String _ticker;
   List<DateTime> _dates;
 
+  void initState() {
+    super.initState();
+    _ticker = '';
+    _dates = _getInitRange();
+  }
+
+  List<DateTime> _getInitRange() {
+    return [DateTime.now().subtract(Duration(days: 5)), DateTime.now()];
+  }
+
   void handlePress(BuildContext context) async {
-    if (_ticker != null && _dates != null) {
+    if (_getFABStatus()) {
       String _startStamp =
           (_dates.first.millisecondsSinceEpoch ~/ 1000).toString();
       String _endStamp =
@@ -54,6 +65,10 @@ class MainScreenState extends AppBaseState<MainScreen> {
     });
   }
 
+  bool _getFABStatus() {
+    return _ticker != '' && _dates != null && _dates.length == 2;
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -76,13 +91,15 @@ class MainScreenState extends AppBaseState<MainScreen> {
             Divider(
               height: 12.0,
             ),
-            DateRangeSelector(_handleDateSubmit),
+            DateRangeSelector(_dates, _handleDateSubmit),
           ],
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
+          backgroundColor:
+              _getFABStatus() ? Theme.of(context).primaryColor : Colors.grey,
           onPressed: () => this.handlePress(context),
           label: Text('Load Data'),
           icon: Icon(Icons.add)),
@@ -121,7 +138,6 @@ class _TickerSelectFormState extends State<TickerSelectForm> {
   Widget build(BuildContext context) {
     final Future<List<String>> _fs = TickerManager().tickers;
     return Center(
-        // TODO: add stock fetching form
         child: FutureBuilder(
       future: _fs,
       builder: (context, snapshot) {
@@ -153,24 +169,28 @@ class _TickerSelectFormState extends State<TickerSelectForm> {
 
 class DateRangeSelector extends StatefulWidget {
   final Function _handleDateSubmit;
-  DateRangeSelector(this._handleDateSubmit);
+  final List<DateTime> _initDates;
+
+  DateRangeSelector(this._initDates, this._handleDateSubmit);
 
   @override
   _DateRangeSelectorState createState() =>
-      _DateRangeSelectorState(_handleDateSubmit);
+      _DateRangeSelectorState(_initDates, _handleDateSubmit);
 }
 
 class _DateRangeSelectorState extends State<DateRangeSelector> {
   final Function _handleDateSubmit;
   List<DateTime> _dates;
 
-  _DateRangeSelectorState(this._handleDateSubmit);
+  _DateRangeSelectorState(this._dates, this._handleDateSubmit);
 
   void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
     final PickerDateRange _r = args.value;
-    this.setState(() {
-      _dates = [_r.startDate, _r.endDate];
-    });
+    if (_r.startDate != null && _r.endDate != null) {
+      this.setState(() {
+        _dates = [_r.startDate, _r.endDate];
+      });
+    }
   }
 
   void _handleDateAlertSubmit(BuildContext context) {
@@ -197,15 +217,6 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
     }
   }
 
-  PickerDateRange _getInitRange() {
-    if (_dates != null && _dates.first != null && _dates.last != null) {
-      return PickerDateRange(_dates.first, _dates.last);
-    } else {
-      return PickerDateRange(
-          DateTime.now().subtract(Duration(days: 5)), DateTime.now());
-    }
-  }
-
   void _onShowDialog(BuildContext context) {
     showDialog(
         context: context,
@@ -220,7 +231,8 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
                 onSelectionChanged: _onSelectionChanged,
                 minDate: DateTime.now().subtract(Duration(days: 365 * 5)),
                 maxDate: DateTime.now(),
-                initialSelectedRange: _getInitRange(),
+                initialSelectedRange:
+                    PickerDateRange(_dates.first, _dates.last),
               ),
             ),
             actions: [
@@ -239,9 +251,17 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: ElevatedButton(
-        onPressed: () => _onShowDialog(context),
-        child: Text('Pick Date Range'),
+      child: Column(
+        children: [
+          ElevatedButton(
+            onPressed: () => _onShowDialog(context),
+            child: Text('Pick Date Range'),
+          ),
+          Text('Start: ${DateFormat.yMd().format(_dates.first)}'),
+          Text('End: ${DateFormat.yMd().format(_dates.last)}')
+        ],
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.start,
       ),
     );
   }
