@@ -1,4 +1,5 @@
 import 'package:csv/csv.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
 class TickerManager {
@@ -15,8 +16,8 @@ class TickerManager {
   }
 
   List<String> _flattenTickers(List<List<dynamic>> tickers) {
-    // tickers is of the form [[A], [B]m [C] ...]
-    if (tickers.first.length == 1) {
+    // tickers is of the form [[A, ','], [B, ','], [C, ','] ...]
+    if (tickers.first.length == 2) {
       return tickers.map((l) => _processTicker(l.first.toString())).toList();
       // tickers is of the form [[A, B, C, ...]]
     } else {
