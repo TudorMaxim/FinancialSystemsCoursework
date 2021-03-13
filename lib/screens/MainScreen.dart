@@ -103,8 +103,10 @@ class MainScreenState extends AppBaseState<MainScreen> {
                       child: Column(
                         children: [
                           TickerSelectForm(_handleTickerSubmit),
-                          Divider(
-                            height: 12.0,
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12.0, vertical: 6.0),
+                            child: Text('Current Ticker: $_ticker'),
                           ),
                           DateRangeSelector(_dates, _handleDateSubmit),
                         ],
