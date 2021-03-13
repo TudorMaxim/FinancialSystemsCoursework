@@ -15,8 +15,10 @@ class TickerManager {
   }
 
   List<String> _flattenTickers(List<List<dynamic>> tickers) {
+    // tickers is of the form [[A], [B]m [C] ...]
     if (tickers.first.length == 1) {
       return tickers.map((l) => _processTicker(l.first.toString())).toList();
+      // tickers is of the form [[A, B, C, ...]]
     } else {
       return tickers.first.map((s) => _processTicker(s)).toList();
     }

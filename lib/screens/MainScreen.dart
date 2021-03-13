@@ -85,16 +85,38 @@ class MainScreenState extends AppBaseState<MainScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
-        child: Column(
-          children: [
-            TickerSelectForm(_handleTickerSubmit),
-            Divider(
-              height: 12.0,
+        child: Container(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              child: Wrap(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Theme.of(context).primaryColor,
+                          width: 3.0,
+                        ),
+                        borderRadius: BorderRadius.circular(6.0)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          TickerSelectForm(_handleTickerSubmit),
+                          Divider(
+                            height: 12.0,
+                          ),
+                          DateRangeSelector(_dates, _handleDateSubmit),
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            DateRangeSelector(_dates, _handleDateSubmit),
-          ],
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -257,10 +279,23 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
             onPressed: () => _onShowDialog(context),
             child: Text('Pick Date Range'),
           ),
-          Text('Start: ${DateFormat.yMd().format(_dates.first)}'),
-          Text('End: ${DateFormat.yMd().format(_dates.last)}')
+          VerticalDivider(
+            width: 12.0,
+          ),
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+            child: Text('Start: ${DateFormat.yMd().format(_dates.first)}'),
+          ),
+          VerticalDivider(
+            width: 12.0,
+          ),
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+            child: Text('End: ${DateFormat.yMd().format(_dates.last)}'),
+          )
         ],
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.start,
       ),
     );
