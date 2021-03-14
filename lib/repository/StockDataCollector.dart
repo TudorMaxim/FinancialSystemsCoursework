@@ -34,10 +34,14 @@ class StockDataCollector {
         'Content-Type': 'application/json',
       },
     );
+    if (response.statusCode == 200) {
+      var jsonResponse = jsonDecode(response.body);
+      return jsonToStocks(symbol, jsonResponse);
 
-    var jsonResponse = jsonDecode(response.body);
+    } else {
+      return null;
+    }
 
-    return jsonToStocks(symbol, jsonResponse);
   }
 
   /**
