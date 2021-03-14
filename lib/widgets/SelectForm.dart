@@ -33,7 +33,6 @@ class _SelectFormState extends State<SelectForm> {
 
   @override
   Widget build(BuildContext context) {
-//    final Future<List<String>> _fs = TickerManager().tickers;
     return Center(
         child: FutureBuilder(
           future: widget.values,
