@@ -32,4 +32,11 @@ class Stock {
   void setCurrentMarketPrice(double currentMarketPrice) {
     this.currentMarketPrice = currentMarketPrice;
   }
+
+  @override
+  String toString() {
+    return "Stock: { symbol: " + this.symbol + ", timestamp: " +
+        DateTime.fromMillisecondsSinceEpoch(this.timestamp).toIso8601String() + ", currentMarketPrice: " +
+        this.currentMarketPrice.toString() + " }\n";
+  }
 }

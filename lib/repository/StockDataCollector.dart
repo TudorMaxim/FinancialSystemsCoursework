@@ -51,8 +51,13 @@ class StockDataCollector {
    */
   static List<Stock> jsonToStocks(String symbol, dynamic jsonObject) {
 
-    List<int> timestamps = (jsonObject['chart']['result'][0]['timestamp'] as List).cast<int>().toList();
-    List<double> prices = (jsonObject['chart']['result'][0]['indicators']['quote'][0]['close'] as List).cast<double>().toList();
+    List<int> timestamps = (jsonObject['chart']['result'][0]['timestamp'] as List)
+        .cast<int>()
+        .map((timestamp) => timestamp * 1000) // convert timestamps to millisecondsSinceEpoch.
+        .toList();
+    List<double> prices = (jsonObject['chart']['result'][0]['indicators']['quote'][0]['close'] as List)
+        .cast<double>()
+        .toList();
 
     List<Stock> stockList = List.empty(growable: true);
 

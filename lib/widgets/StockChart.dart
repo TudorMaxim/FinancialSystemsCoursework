@@ -1,7 +1,7 @@
+import 'package:financial_systems_coursework/model/Point.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:financial_systems_coursework/model/Point.dart';
 
 class StockChart extends StatelessWidget {
   final List<charts.Series> seriesList;
@@ -17,6 +17,7 @@ class StockChart extends StatelessWidget {
     dateTimeFactory: const charts.LocalDateTimeFactory(),
     defaultRenderer: new charts.LineRendererConfig(includePoints: true),
     behaviors: [
+      charts.PanAndZoomBehavior(),
       charts.SeriesLegend(
           position: charts.BehaviorPosition.bottom
       ),

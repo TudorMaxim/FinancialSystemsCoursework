@@ -1,7 +1,11 @@
-import 'dart:math';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:financial_systems_coursework/model/GraphType.dart';
 import 'package:financial_systems_coursework/model/Point.dart';
+import 'package:financial_systems_coursework/model/formulae/EMA.dart';
+import 'package:financial_systems_coursework/model/formulae/MACD.dart';
+import 'package:financial_systems_coursework/model/formulae/MACDAVG.dart';
+import 'package:financial_systems_coursework/model/formulae/PriceData.dart';
+import 'package:financial_systems_coursework/model/formulae/SMA.dart';
 import 'package:financial_systems_coursework/shared/AppBaseState.dart';
 import 'package:financial_systems_coursework/widgets/StockChart.dart';
 import 'package:financial_systems_coursework/model/Stock.dart';
@@ -12,11 +16,11 @@ class DetailsScreen extends StatefulWidget {
   final String title;
   final List<Stock> stocks;
   final List<GraphType> graphTypes = [
-    GraphType(name: 'USD Price Data', defaultSelected: true),
-    GraphType(name: 'SMA', defaultSelected: true),
-    GraphType(name: 'EMA', defaultSelected: false),
-    GraphType(name: 'MACD', defaultSelected: false),
-    GraphType(name: 'MACDAVG', defaultSelected: false),
+    GraphType(name: 'USD Price Data', defaultSelected: true, formulae: PriceData()),
+    GraphType(name: 'SMA', defaultSelected: true, formulae: SMA()),
+    GraphType(name: 'EMA', defaultSelected: false, formulae: EMA()),
+    GraphType(name: 'MACD', defaultSelected: false, formulae: MACD()),
+    GraphType(name: 'MACDAVG', defaultSelected: false, formulae: MACDAVG()),
   ];
 
   DetailsScreen({Key key, this.title, this.stocks}) : super(key: key);
@@ -31,6 +35,9 @@ class DetailsScreenState extends AppBaseState<DetailsScreen> {
   @override
   void initState() {
     super.initState();
+    print(widget.stocks);
+    print(DateTime.parse('2021-03-07').millisecondsSinceEpoch);
+    print(DateTime.parse('2021-03-14').millisecondsSinceEpoch);
     setState(() {
       widget.graphTypes.forEach(
           (type) => (selectedGraphTypes[type.name] = type.defaultSelected));
@@ -93,33 +100,24 @@ class DetailsScreenState extends AppBaseState<DetailsScreen> {
       child: Container(
         padding: EdgeInsets.all(10),
         child: StockChart(
-          name: 'TSLA', // TODO: get stock name
+          name: widget.stocks.first.symbol,
           seriesList: this._getSeriesList(),
           animate: true,
         ),
       ));
 
-  List<charts.Series<Point, DateTime>> _getSeriesList() {
-    var mockData = [
-      Point(10.0, DateTime.parse('2020-01-01').millisecondsSinceEpoch),
-      Point(20.0, DateTime.parse('2020-02-01').millisecondsSinceEpoch),
-      Point(15.0, DateTime.parse('2020-03-01').millisecondsSinceEpoch),
-      Point(25.0, DateTime.parse('2020-04-01').millisecondsSinceEpoch),
-      Point(30.0, DateTime.parse('2020-05-01').millisecondsSinceEpoch),
-    ];
-    List<charts.Series<Point, DateTime>> seriesList = [];
-    Random random = Random();
-    int maxVal = 5;
-    this.selectedGraphTypes.keys.forEach((String key) {
-      if (this.selectedGraphTypes[key]) {
-        seriesList.add(StockChart.generateSeries(
-          key,
-          mockData
-              .map((Point p) => Point(p.value + random.nextInt(maxVal), p.timestamp))
-              .toList(),
-        ));
-      }
-    });
-    return seriesList;
-  }
+  List<charts.Series<Point, DateTime>> _getSeriesList() =>
+    this.selectedGraphTypes.entries
+      .where((entry) => entry.value)
+      .map((entry) => StockChart.generateSeries(
+        entry.key,
+        this._mapStocksToPoints(entry.key)
+      ))
+      .toList();
+
+  List<Point> _mapStocksToPoints(String name) =>
+    widget.graphTypes
+      .firstWhere((graphType) => graphType.name == name)
+      .formulae
+      .compute(widget.stocks);
 }
