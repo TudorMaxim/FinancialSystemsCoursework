@@ -11,12 +11,13 @@ import 'package:financial_systems_coursework/widgets/StockChart.dart';
 import 'package:financial_systems_coursework/model/Stock.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class DetailsScreen extends StatefulWidget {
   final String title;
   final List<Stock> stocks;
   final List<GraphType> graphTypes = [
-    GraphType(name: 'USD Price Data', defaultSelected: true, formulae: PriceData()),
+    GraphType(name: 'USD Price', defaultSelected: true, formulae: PriceData()),
     GraphType(name: 'SMA', defaultSelected: true, formulae: SMA()),
     GraphType(name: 'EMA', defaultSelected: false, formulae: EMA()),
     GraphType(name: 'MACD', defaultSelected: false, formulae: MACD()),
@@ -97,8 +98,9 @@ class DetailsScreenState extends AppBaseState<DetailsScreen> {
       child: Container(
         padding: EdgeInsets.all(10),
         child: StockChart(
-          name: widget.stocks.first.symbol,
+          symbol: widget.stocks.first.symbol,
           seriesList: this._getSeriesList(),
+          info: this._getLatestInfo(),
           animate: true,
         ),
       ));
@@ -117,4 +119,21 @@ class DetailsScreenState extends AppBaseState<DetailsScreen> {
       .firstWhere((graphType) => graphType.name == name)
       .formulae
       .compute(widget.stocks);
+
+  Map<String, String> _getLatestInfo() {
+    Map<String, String> info = {};
+    List<MapEntry<String, List<Point>>> series = this.selectedGraphTypes.entries
+      .where((entry) => entry.value)
+      .map((entry) => MapEntry(entry.key, this._mapStocksToPoints(entry.key)))
+      .toList();
+
+    DateTime time = DateTime.fromMillisecondsSinceEpoch(series.first.value.last.timestamp);
+    info['Date'] = DateFormat('dd-MMM-yyyy').format(time);
+    info['Time'] = DateFormat('hh-mm a').format(time);
+
+    series.forEach((entry) {
+      info[entry.key] = '\$' + entry.value.last.value.toStringAsFixed(2);
+    });
+    return info;
+  }
 }
