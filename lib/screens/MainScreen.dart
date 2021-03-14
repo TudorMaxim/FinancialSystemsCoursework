@@ -38,7 +38,7 @@ class MainScreenState extends AppBaseState<MainScreen> {
           (_dates.first.millisecondsSinceEpoch ~/ 1000).toString();
       String _endStamp =
           (_dates.last.millisecondsSinceEpoch ~/ 1000).toString();
-      List<Stock> _stocks = await StockDataCollector.getPrices(
+      List<Stock> _stocks = await StockDataCollector.getInstance().getPrices(
           _ticker.trim(), _startStamp, _endStamp);
       Navigator.of(context).push(
         MaterialPageRoute(
