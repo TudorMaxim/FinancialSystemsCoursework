@@ -35,9 +35,6 @@ class DetailsScreenState extends AppBaseState<DetailsScreen> {
   @override
   void initState() {
     super.initState();
-    print(widget.stocks);
-    print(DateTime.parse('2021-03-07').millisecondsSinceEpoch);
-    print(DateTime.parse('2021-03-14').millisecondsSinceEpoch);
     setState(() {
       widget.graphTypes.forEach(
           (type) => (selectedGraphTypes[type.name] = type.defaultSelected));

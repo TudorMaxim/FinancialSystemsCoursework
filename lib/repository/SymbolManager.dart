@@ -1,36 +1,35 @@
 import 'package:csv/csv.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
-class TickerManager {
-  static final TickerManager _instance = TickerManager._init();
+class SymbolManager {
+  static final SymbolManager _instance = SymbolManager._init();
 
-  TickerManager._init();
+  SymbolManager._init();
 
-  factory TickerManager() {
+  factory SymbolManager() {
     return _instance;
   }
 
-  String _processTicker(String t) {
+  String _processSymbol(String t) {
     return t.replaceAll(',', '').trim();
   }
 
-  List<String> _flattenTickers(List<List<dynamic>> tickers) {
+  List<String> _flattenSymbols(List<List<dynamic>> tickers) {
     // tickers is of the form [[A, ','], [B, ','], [C, ','] ...]
     if (tickers.first.length == 2) {
-      return tickers.map((l) => _processTicker(l.first.toString())).toList();
+      return tickers.map((l) => _processSymbol(l.first.toString())).toList();
       // tickers is of the form [[A, B, C, ...]]
     } else {
-      return tickers.first.map((s) => _processTicker(s)).toList();
+      return tickers.first.map((s) => _processSymbol(s)).toList();
     }
   }
 
-  Future<List<String>> get tickers async {
+  Future<List<String>> get symbols async {
     final String _tickerString =
         await rootBundle.loadString('assets/tickers.csv');
     final List<List<dynamic>> _csvData =
         CsvToListConverter().convert(_tickerString);
-    return _flattenTickers(_csvData);
+    return _flattenSymbols(_csvData);
   }
 
   List<String> filterSuggestions(String pattern, List<String> tickers) {

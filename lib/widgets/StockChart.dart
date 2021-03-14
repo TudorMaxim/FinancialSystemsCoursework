@@ -16,6 +16,9 @@ class StockChart extends StatelessWidget {
     animate: false,
     dateTimeFactory: const charts.LocalDateTimeFactory(),
     defaultRenderer: new charts.LineRendererConfig(includePoints: true),
+    primaryMeasureAxis: charts.NumericAxisSpec(
+      tickFormatterSpec: charts.BasicNumericTickFormatterSpec((value) => "\$$value"),
+    ),
     behaviors: [
       charts.PanAndZoomBehavior(),
       charts.SeriesLegend(
