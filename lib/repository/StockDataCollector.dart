@@ -5,6 +5,18 @@ import 'package:http/http.dart' as http;
 
 class StockDataCollector {
 
+  static StockDataCollector _instance;
+
+  StockDataCollector._internal();
+
+  static StockDataCollector getInstance() {
+    if (_instance == null) {
+      _instance = StockDataCollector._internal();
+    }
+
+    return _instance;
+  }
+
   /// Craft URL
   static String createURL(String symbol, String startDate, String endDate) {
     return "https://query1.finance.yahoo.com/v8/finance/chart/" + symbol +
@@ -27,7 +39,7 @@ class StockDataCollector {
    * Corresponding URL:
    *    https://query1.finance.yahoo.com/v8/finance/chart/AAPL?symbol=AAPL&period1=1612437713&period2=1614856913&interval=1d
    */
-  static Future<List<Stock>> getPrices(String symbol, String startDate, String endDate) async {
+  Future<List<Stock>> getPrices(String symbol, String startDate, String endDate) async {
     final response = await http.get(
       createURL(symbol, startDate, endDate),
       headers: <String, String> {
