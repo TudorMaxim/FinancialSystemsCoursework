@@ -5,17 +5,13 @@ import 'package:http/http.dart' as http;
 
 class StockDataCollector {
 
-  static StockDataCollector _instance;
+  static final StockDataCollector _instance = StockDataCollector._internal();
 
-  StockDataCollector._internal();
-
-  static StockDataCollector getInstance() {
-    if (_instance == null) {
-      _instance = StockDataCollector._internal();
-    }
-
+  factory StockDataCollector() {
     return _instance;
   }
+
+  StockDataCollector._internal();
 
   /// Craft URL
   String _createURL(String symbol, String startDate, String endDate) {
