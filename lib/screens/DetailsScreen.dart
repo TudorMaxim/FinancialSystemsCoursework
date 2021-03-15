@@ -11,7 +11,6 @@ import 'package:financial_systems_coursework/widgets/StockChart.dart';
 import 'package:financial_systems_coursework/model/Stock.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class DetailsScreen extends StatefulWidget {
   final String title;
@@ -36,10 +35,9 @@ class DetailsScreenState extends AppBaseState<DetailsScreen> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      widget.graphTypes.forEach(
-          (type) => (selectedGraphTypes[type.name] = type.defaultSelected));
-    });
+    widget.graphTypes.forEach(
+        (type) => (selectedGraphTypes[type.name] = type.defaultSelected)
+    );
   }
 
   void handleSelectedChoices(String type) {
@@ -48,7 +46,10 @@ class DetailsScreenState extends AppBaseState<DetailsScreen> {
         .toList();
     if (selected.length == 2 && !selected.contains(type)) {
       showAlertDialog(context, 'Error',
-          'You may have only two graphs active at the same time');
+          'You may have only two indicators visible at the same time');
+    } else if (selected.length == 1 && selected.contains(type)) {
+      showAlertDialog(context, 'Error',
+          'You must have at least one indicator visible in the chart');
     } else {
       setState(() {
         selectedGraphTypes[type] = !selectedGraphTypes[type];
@@ -100,7 +101,6 @@ class DetailsScreenState extends AppBaseState<DetailsScreen> {
         child: StockChart(
           symbol: widget.stocks.first.symbol,
           seriesList: this._getSeriesList(),
-          info: this._getLatestInfo(),
           animate: true,
         ),
       ));
@@ -119,21 +119,4 @@ class DetailsScreenState extends AppBaseState<DetailsScreen> {
       .firstWhere((graphType) => graphType.name == name)
       .formulae
       .compute(widget.stocks);
-
-  Map<String, String> _getLatestInfo() {
-    Map<String, String> info = {};
-    List<MapEntry<String, List<Point>>> series = this.selectedGraphTypes.entries
-      .where((entry) => entry.value)
-      .map((entry) => MapEntry(entry.key, this._mapStocksToPoints(entry.key)))
-      .toList();
-
-    DateTime time = DateTime.fromMillisecondsSinceEpoch(series.first.value.last.timestamp);
-    info['Date'] = DateFormat('dd-MMM-yyyy').format(time);
-    info['Time'] = DateFormat('hh-mm a').format(time);
-
-    series.forEach((entry) {
-      info[entry.key] = '\$' + entry.value.last.value.toStringAsFixed(2);
-    });
-    return info;
-  }
 }
