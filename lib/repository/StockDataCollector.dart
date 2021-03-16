@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:financial_systems_coursework/model/Stock.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class StockDataCollector {
@@ -13,15 +12,13 @@ class StockDataCollector {
 
   StockDataCollector._internal();
 
-  /// Craft URL
-  String _createURL(String symbol, String startDate, String endDate) {
+  String _createURL(String symbol, String startDate, String endDate, String interval) {
     return "https://query1.finance.yahoo.com/v8/finance/chart/" + symbol +
         "?symbol=" + symbol +
         "&period1=" + startDate +
         "&period2=" + endDate +
-        "&interval=1d";
+        "&interval=" + interval;
   }
-
 
   /**
    * symbol: company stock symbol
@@ -35,9 +32,9 @@ class StockDataCollector {
    * Corresponding URL:
    *    https://query1.finance.yahoo.com/v8/finance/chart/AAPL?symbol=AAPL&period1=1612437713&period2=1614856913&interval=1d
    */
-  Future<List<Stock>> getPrices(String symbol, String startDate, String endDate) async {
+  Future<List<Stock>> getPrices(String symbol, String startDate, String endDate, String interval) async {
     final response = await http.get(
-      _createURL(symbol, startDate, endDate),
+      _createURL(symbol, startDate, endDate, interval),
       headers: <String, String> {
         'Content-Type': 'application/json',
       },
@@ -59,13 +56,20 @@ class StockDataCollector {
    */
   List<Stock> _jsonToStocks(String symbol, dynamic jsonObject) {
 
-    List<int> timestamps = (jsonObject['chart']['result'][0]['timestamp'] as List).cast<int>().toList();
-    List<double> prices = (jsonObject['chart']['result'][0]['indicators']['quote'][0]['close'] as List).cast<double>().toList();
+    List<int> timestamps = (jsonObject['chart']['result'][0]['timestamp'] as List)
+        .cast<int>()
+        .map((timestamp) => timestamp * 1000) // convert timestamps to millisecondsSinceEpoch.
+        .toList();
+    List<double> prices = (jsonObject['chart']['result'][0]['indicators']['quote'][0]['close'] as List)
+        .cast<double>()
+        .toList();
 
     List<Stock> stockList = List.empty(growable: true);
 
     for (int i = 0 ; i < timestamps.length; ++i) {
-      stockList.add(new Stock(symbol, timestamps[i], prices[i]));
+      if (prices[i] != null) {
+        stockList.add(new Stock(symbol, timestamps[i], prices[i]));
+      }
     }
 
     return stockList;

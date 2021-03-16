@@ -1,7 +1,8 @@
 import '../Stock.dart';
+import '../Point.dart';
 
 abstract class Formulae {
 
-  List<double> compute(List<Stock> stocks);
+  List<Point> compute(List<Stock> stocks);
 
 }

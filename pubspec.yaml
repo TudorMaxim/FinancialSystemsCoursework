@@ -23,7 +23,8 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
-  fl_chart:
+  charts_flutter: ^0.9.0
+  intl:
   finance_quote:
   sqflite:
   http:
@@ -32,7 +33,6 @@ dependencies:
   csv: ^4.1.0
   flutter_typeahead: ^2.0.0
   syncfusion_flutter_datepicker: ^18.4.47-beta
-  intl:
 
 dev_dependencies:
   flutter_test:
