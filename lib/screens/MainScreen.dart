@@ -1,8 +1,9 @@
-import 'package:financial_systems_coursework/repository/StockDataCollector.dart';
+import 'package:financial_systems_coursework/repository/StockDataProvider.dart';
 import 'package:financial_systems_coursework/repository/SymbolManager.dart';
 import 'package:financial_systems_coursework/screens/DetailsScreen.dart';
 import 'package:financial_systems_coursework/shared/AppBaseState.dart';
 import 'package:financial_systems_coursework/model/Stock.dart';
+import 'package:financial_systems_coursework/shared/interval.dart';
 import 'package:financial_systems_coursework/widgets/DateRangeSelector.dart';
 import 'package:financial_systems_coursework/widgets/SelectForm.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,13 +19,13 @@ class MainScreen extends StatefulWidget {
 
 class MainScreenState extends AppBaseState<MainScreen> {
   String _symbol;
-  String _interval;
+  StockInterval _interval;
   List<DateTime> _dates;
 
   void initState() {
     super.initState();
     _symbol = '';
-    _interval = '';
+    _interval = StockInterval.i1d;
     _dates = _getInitRange();
   }
 
@@ -34,18 +35,13 @@ class MainScreenState extends AppBaseState<MainScreen> {
 
   void handlePress(BuildContext context) async {
     if (!connected) {
-      showAlertDialog(
-          context, 'Error',
-          'Could not fetch data about $_symbol!\nPlease check your internet connection!'
-      );
-    }
-    else if (_getFABStatus()) {
-      String _startStamp =
-          (_dates.first.millisecondsSinceEpoch ~/ 1000).toString();
-      String _endStamp =
-          (_dates.last.millisecondsSinceEpoch ~/ 1000).toString();
-      List<Stock> _stocks = await StockDataCollector.getInstance().getPrices(
-          _symbol.trim(), _startStamp, _endStamp, _interval);
+      showAlertDialog(context, 'Error',
+          'Could not fetch data about $_symbol!\nPlease check your internet connection!');
+    } else if (_getFABStatus()) {
+      final int _startStamp = (_dates.first.millisecondsSinceEpoch ~/ 1000);
+      final int _endStamp = (_dates.last.millisecondsSinceEpoch ~/ 1000);
+      List<Stock> _stocks = await StockDataProvider()
+          .getPrices(_symbol, _startStamp, _endStamp, _interval);
       Navigator.of(context).push(
         MaterialPageRoute(
             builder: (context) =>
@@ -53,7 +49,8 @@ class MainScreenState extends AppBaseState<MainScreen> {
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Please select the symbol, interval and a valid date range'),
+        content:
+            Text('Please select the symbol, interval and a valid date range'),
         duration: Duration(seconds: 2),
       ));
     }
@@ -67,7 +64,7 @@ class MainScreenState extends AppBaseState<MainScreen> {
 
   _handleIntervalSubmit(String interval) {
     this.setState(() {
-      _interval = interval;
+      _interval = IntervalMapping.fromString(interval);
     });
   }
 
@@ -78,7 +75,10 @@ class MainScreenState extends AppBaseState<MainScreen> {
   }
 
   bool _getFABStatus() {
-    return _symbol != '' && _dates != null && _dates.length == 2 && _interval != '';
+    return _symbol != '' &&
+        _dates != null &&
+        _dates.length == 2 &&
+        _interval != '';
   }
 
   @override
@@ -112,35 +112,34 @@ class MainScreenState extends AppBaseState<MainScreen> {
                         borderRadius: BorderRadius.circular(6.0)),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            SelectForm(
-                              fieldName: 'Symbol',
-                              values: SymbolManager().symbols,
-                              handleSubmit: _handleSymbolSubmit,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12.0, vertical: 6.0),
-                              child: Text('Current Symbol: $_symbol'),
-                            ),
-                            SelectForm(
-                              fieldName: 'Interval',
-                              values: Future<List<String>>.value(
-                                  ['1h', '1d', '5d', '1wk', '1mo', '3mo']
-                              ),
-                              handleSubmit: _handleIntervalSubmit,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12.0, vertical: 6.0),
-                              child: Text('Current Interval: $_interval'),
-                            ),
-                            DateRangeSelector(_dates, _handleDateSubmit),
-                          ],
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                        ),
+                      child: Column(
+                        children: [
+                          SelectForm(
+                            fieldName: 'Symbol',
+                            values: SymbolManager().symbols,
+                            handleSubmit: _handleSymbolSubmit,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12.0, vertical: 6.0),
+                            child: Text('Current Symbol: $_symbol'),
+                          ),
+                          SelectForm(
+                            fieldName: 'Interval',
+                            values: Future<List<String>>.value(
+                                IntervalMapping.stringList()),
+                            handleSubmit: _handleIntervalSubmit,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12.0, vertical: 6.0),
+                            child: Text('Current Interval: $_interval'),
+                          ),
+                          DateRangeSelector(_dates, _handleDateSubmit),
+                        ],
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                      ),
                     ),
                   ),
                 ],

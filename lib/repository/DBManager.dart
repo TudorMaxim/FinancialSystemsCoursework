@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:financial_systems_coursework/shared/interval.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sqflite/sqflite.dart';
@@ -57,9 +59,10 @@ class DBManager {
   }
 
   Future<Database> _initDB() async {
-    return openDatabase(join(await getDatabasesPath(), 'stocksApp.db'),
-        onCreate: (db, version) {
-      db.execute('''CREATE TABLE STOCKS(
+    Database db =
+        await openDatabase(join(await getDatabasesPath(), 'stocksApp.db'),
+            onCreate: (db, version) async {
+      await db.execute('''CREATE TABLE STOCKS(
             id INTEGER PRIMARY KEY,
             ticker TEXT,
             fromTimestamp INTEGER,
@@ -68,6 +71,8 @@ class DBManager {
             values TEXT
           )''');
     }, version: 1);
+    debugPrint('Database has been created!');
+    return db;
   }
 
   Future<Database> get db {
@@ -98,7 +103,7 @@ class DBManager {
 
   Future<List<Stock>> unsafeGetFromDB(String ticker, int from, int to) async {
     StockDBEntry _entry = await getByTicker(ticker);
-    List<Stock> _stocks = Stock.jsonToStocks(ticker, _entry.values);
+    List<Stock> _stocks = Stock.jsonToStocks(ticker, jsonDecode(_entry.values));
     return _stocks.where((s) => s.timestamp >= from && s.timestamp <= to);
   }
 
@@ -106,8 +111,10 @@ class DBManager {
       String ticker, int from, int to, StockInterval interval) async {
     bool _isCached = await isCached(ticker, from, to, interval);
     if (!_isCached) {
+      debugPrint('Cache miss for: $ticker');
       return null;
     } else {
+      debugPrint('Cache hit for: $ticker');
       return unsafeGetFromDB(ticker, from, to);
     }
   }
@@ -126,5 +133,6 @@ class DBManager {
     await db.transaction((txn) async {
       await txn.insert('STOCKS', entry.map);
     });
+    debugPrint('Cache for $ticker has been refreshed.');
   }
 }
