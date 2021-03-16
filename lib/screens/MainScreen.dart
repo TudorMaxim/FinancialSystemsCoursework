@@ -133,7 +133,7 @@ class MainScreenState extends AppBaseState<MainScreen> {
                           Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 12.0, vertical: 6.0),
-                            child: Text('Current Interval: $_interval'),
+                            child: Text('Current Interval: ${_interval.name}'),
                           ),
                           DateRangeSelector(_dates, _handleDateSubmit),
                         ],

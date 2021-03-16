@@ -27,7 +27,7 @@ class StockDBEntry {
     this.fromTimestamp = map['fromTimestamp'];
     this.toTimestamp = map['toTimestamp'];
     this.interval = IntervalMapping.fromString(map['interval']);
-    this.values = map['values'];
+    this.values = map['jsonValues'];
   }
 
   Map<String, dynamic> get map {
@@ -36,9 +36,9 @@ class StockDBEntry {
       'fromTimestamp': this.fromTimestamp,
       'toTimestamp': this.toTimestamp,
       'interval': this.interval.name,
-      'values': this.values
+      'jsonValues': this.values
     };
-    if (this.id == -1) {
+    if (this.id != -1) {
       res['id'] = this.id;
     }
     return res;
@@ -48,6 +48,7 @@ class StockDBEntry {
 class DBManager {
   static final DBManager _instance = DBManager._init();
   Future<Database> _db;
+  final String _dbName = 'stocksApp.db';
 
   DBManager._init() {
     WidgetsFlutterBinding.ensureInitialized();
@@ -59,20 +60,25 @@ class DBManager {
   }
 
   Future<Database> _initDB() async {
-    Database db =
-        await openDatabase(join(await getDatabasesPath(), 'stocksApp.db'),
-            onCreate: (db, version) async {
+    Database db = await openDatabase(join(await getDatabasesPath(), _dbName),
+        onCreate: (db, version) async {
       await db.execute('''CREATE TABLE STOCKS(
             id INTEGER PRIMARY KEY,
             ticker TEXT,
             fromTimestamp INTEGER,
             toTimestamp INTEGER,
             interval TEXT,
-            values TEXT
+            jsonValues TEXT
           )''');
     }, version: 1);
     debugPrint('Database has been created!');
     return db;
+  }
+
+  Future<void> deleteDB() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await deleteDatabase(join(await getDatabasesPath(), _dbName));
+    debugPrint('DB has been deleted!');
   }
 
   Future<Database> get db {
@@ -92,7 +98,7 @@ class DBManager {
     Database db = await _db;
     return await db.transaction((txn) async {
       List<Map<String, dynamic>> maps =
-          await txn.query('STOCKS', where: 'ticker = $ticker');
+          await txn.query('STOCKS', where: 'ticker = \'$ticker\'');
       if (maps.isEmpty) {
         return null;
       } else {
@@ -123,7 +129,7 @@ class DBManager {
       StockInterval interval, String values) async {
     Database db = await _db;
     await db.transaction((txn) async {
-      await txn.delete('STOCKS', where: 'ticker = $ticker');
+      await txn.delete('STOCKS', where: 'ticker = \'$ticker\'');
     });
     StockDBEntry entry = StockDBEntry(
         fromTimestamp: from,
@@ -135,4 +141,8 @@ class DBManager {
     });
     debugPrint('Cache for $ticker has been refreshed.');
   }
+}
+
+void main() async {
+  await DBManager().deleteDB();
 }
