@@ -10,9 +10,8 @@ class StockDataProvider {
     List<Stock> _fromDB =
         await DBManager().getFromDBOrNull(ticker, from, to, interval);
     if (_fromDB == null) {
-      String stocksJSON = await StockDataCollector.getInstance()
-          .getPricesAsJSON(
-              ticker, from.toString(), to.toString(), interval.name);
+      String stocksJSON = await StockDataCollector().getPricesAsJSON(
+          ticker, from.toString(), to.toString(), interval.name);
       await DBManager().refreshCache(ticker, from, to, interval, stocksJSON);
       return Stock.jsonToStocks(ticker, jsonDecode(stocksJSON));
     } else {

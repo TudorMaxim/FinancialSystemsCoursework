@@ -16,6 +16,7 @@ class StockDBEntry {
 
   StockDBEntry(
       {this.id = -1,
+      this.ticker,
       this.fromTimestamp,
       this.toTimestamp,
       this.interval,
@@ -42,6 +43,11 @@ class StockDBEntry {
       res['id'] = this.id;
     }
     return res;
+  }
+
+  @override
+  String toString() {
+    return 'Stock DB Entry{ ticker: $ticker, id: $id, from: $fromTimestamp, to: $toTimestamp, interval: ${interval.name}}\n';
   }
 }
 
@@ -87,14 +93,14 @@ class DBManager {
 
   Future<bool> isCached(
       String ticker, int from, int to, StockInterval interval) async {
-    StockDBEntry _entry = await getByTicker(ticker);
+    StockDBEntry _entry = await _getByTicker(ticker);
     return _entry != null &&
         from >= _entry.fromTimestamp &&
         to <= _entry.toTimestamp &&
         interval == _entry.interval;
   }
 
-  Future<StockDBEntry> getByTicker(String ticker) async {
+  Future<StockDBEntry> _getByTicker(String ticker) async {
     Database db = await _db;
     return await db.transaction((txn) async {
       List<Map<String, dynamic>> maps =
@@ -107,10 +113,17 @@ class DBManager {
     });
   }
 
-  Future<List<Stock>> unsafeGetFromDB(String ticker, int from, int to) async {
-    StockDBEntry _entry = await getByTicker(ticker);
+  Future<List<Stock>> _unsafeGetFromDB(String ticker, int from, int to) async {
+    int _oneDay = 86400000;
+    StockDBEntry _entry = await _getByTicker(ticker);
     List<Stock> _stocks = Stock.jsonToStocks(ticker, jsonDecode(_entry.values));
-    return _stocks.where((s) => s.timestamp >= from && s.timestamp <= to);
+    List<Stock> res = _stocks
+        .where((s) =>
+            s.timestamp ~/ 1000 >= from - _oneDay && s.timestamp ~/ 1000 <= to)
+        .toList();
+    debugPrint(
+        'Found: ${res.length.toString()} stocks. Initially ${_stocks.length.toString()} stocks.');
+    return res;
   }
 
   Future<List<Stock>> getFromDBOrNull(
@@ -121,7 +134,7 @@ class DBManager {
       return null;
     } else {
       debugPrint('Cache hit for: $ticker');
-      return unsafeGetFromDB(ticker, from, to);
+      return _unsafeGetFromDB(ticker, from, to);
     }
   }
 
@@ -132,6 +145,7 @@ class DBManager {
       await txn.delete('STOCKS', where: 'ticker = \'$ticker\'');
     });
     StockDBEntry entry = StockDBEntry(
+        ticker: ticker,
         fromTimestamp: from,
         toTimestamp: to,
         interval: interval,
@@ -141,8 +155,21 @@ class DBManager {
     });
     debugPrint('Cache for $ticker has been refreshed.');
   }
+
+  Future<void> printCache() async {
+    Database db = await _db;
+    List<Map<String, dynamic>> maps = await db.transaction((txn) async {
+      return await txn.query('STOCKS');
+    });
+    debugPrint(maps.toString());
+  }
 }
 
 void main() async {
+  Database db = await DBManager().db;
+  List<Map<String, dynamic>> maps = await db.transaction((txn) async {
+    return await txn.query('STOCKS');
+  });
+  debugPrint(maps.toString());
   await DBManager().deleteDB();
 }

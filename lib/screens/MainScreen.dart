@@ -38,10 +38,14 @@ class MainScreenState extends AppBaseState<MainScreen> {
       showAlertDialog(context, 'Error',
           'Could not fetch data about $_symbol!\nPlease check your internet connection!');
     } else if (_getFABStatus()) {
-      final int _startStamp = (_dates.first.millisecondsSinceEpoch ~/ 1000);
-      final int _endStamp = (_dates.last.millisecondsSinceEpoch ~/ 1000);
+      final DateTime _startMidnight = DateTime(
+          _dates.first.year, _dates.first.month, _dates.first.day, 0, 1);
+      final DateTime _endMidnight = DateTime(
+          _dates.last.year, _dates.last.month, _dates.last.day, 23, 59);
+      final int _startStamp = (_startMidnight.millisecondsSinceEpoch ~/ 1000);
+      final int _endStamp = (_endMidnight.millisecondsSinceEpoch ~/ 1000);
       List<Stock> _stocks = await StockDataProvider()
-          .getPrices(_symbol, _startStamp, _endStamp, _interval);
+          .getPrices(_symbol.trim(), _startStamp, _endStamp, _interval);
       Navigator.of(context).push(
         MaterialPageRoute(
             builder: (context) =>
@@ -75,10 +79,7 @@ class MainScreenState extends AppBaseState<MainScreen> {
   }
 
   bool _getFABStatus() {
-    return _symbol != '' &&
-        _dates != null &&
-        _dates.length == 2 &&
-        _interval != '';
+    return _symbol != '' && _dates != null && _dates.length == 2;
   }
 
   @override

@@ -20,6 +20,11 @@ class Stock {
     return map;
   }
 
+  @override
+  String toString() {
+    return '$symbol at $currentMarketPrice on $timestamp';
+  }
+
   /**
    * Create stock objects from collected data.
    *
@@ -41,10 +46,12 @@ class Stock {
     List<Stock> stockList = List.empty(growable: true);
 
     for (int i = 0; i < timestamps.length; ++i) {
-      stockList.add(Stock(
-          symbol: symbol,
-          timestamp: timestamps[i],
-          currentMarketPrice: prices[i]));
+      if (prices[i] != null) {
+        stockList.add(Stock(
+            symbol: symbol,
+            timestamp: timestamps[i],
+            currentMarketPrice: prices[i]));
+      }
     }
 
     return stockList;
