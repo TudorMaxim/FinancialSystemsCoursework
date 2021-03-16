@@ -5,6 +5,14 @@ import 'package:financial_systems_coursework/repository/StockDataCollector.dart'
 import 'package:financial_systems_coursework/shared/interval.dart';
 
 class StockDataProvider {
+  static final StockDataProvider _instance = StockDataProvider._internal();
+
+  StockDataProvider._internal();
+
+  factory StockDataProvider() {
+    return _instance;
+  }
+
   Future<List<Stock>> getPrices(
       String ticker, int from, int to, StockInterval interval) async {
     List<Stock> _fromDB =
