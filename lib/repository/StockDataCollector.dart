@@ -67,7 +67,9 @@ class StockDataCollector {
     List<Stock> stockList = List.empty(growable: true);
 
     for (int i = 0 ; i < timestamps.length; ++i) {
-      stockList.add(new Stock(symbol, timestamps[i], prices[i]));
+      if (prices[i] != null) {
+        stockList.add(new Stock(symbol, timestamps[i], prices[i]));
+      }
     }
 
     return stockList;
