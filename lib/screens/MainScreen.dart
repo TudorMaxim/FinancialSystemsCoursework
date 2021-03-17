@@ -46,11 +46,20 @@ class MainScreenState extends AppBaseState<MainScreen> {
       final int _endStamp = (_endMidnight.millisecondsSinceEpoch ~/ 1000);
       List<Stock> _stocks = await StockDataProvider()
           .getPrices(_symbol.trim(), _startStamp, _endStamp, _interval);
-      Navigator.of(context).push(
-        MaterialPageRoute(
-            builder: (context) =>
-                DetailsScreen(title: 'Stock Details', stocks: _stocks)),
-      );
+      debugPrint('Found ${_stocks.length} stocks.');
+      if (_stocks != null && _stocks.length != 0) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+              builder: (context) =>
+                  DetailsScreen(title: 'Stock Details', stocks: _stocks)),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content:
+              Text('No data points in your selected interval and date range!'),
+          duration: Duration(seconds: 2),
+        ));
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content:
