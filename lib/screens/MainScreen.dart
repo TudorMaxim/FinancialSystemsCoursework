@@ -19,12 +19,14 @@ class MainScreen extends StatefulWidget {
 class MainScreenState extends AppBaseState<MainScreen> {
   String _symbol;
   String _interval;
+  String _period;
   List<DateTime> _dates;
 
   void initState() {
     super.initState();
     _symbol = '';
     _interval = '';
+    _period = '';
     _dates = _getInitRange();
   }
 
@@ -40,6 +42,7 @@ class MainScreenState extends AppBaseState<MainScreen> {
       );
     }
     else if (_getFABStatus()) {
+      DateTime start = _dates.first.subtract(Duration(days: int.parse(_period.substring(0, _period.length - 1))));
       String _startStamp =
           (_dates.first.millisecondsSinceEpoch ~/ 1000).toString();
       String _endStamp =
@@ -50,7 +53,7 @@ class MainScreenState extends AppBaseState<MainScreen> {
       Navigator.of(context).push(
         MaterialPageRoute(
             builder: (context) =>
-                DetailsScreen(title: 'Stock Details', stocks: _stocks)),
+                DetailsScreen(title: 'Stock Details', stocks: _stocks, period: _period)),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -69,6 +72,12 @@ class MainScreenState extends AppBaseState<MainScreen> {
   _handleIntervalSubmit(String interval) {
     this.setState(() {
       _interval = interval;
+    });
+  }
+
+  _handlePeriodSubmit(String period) {
+    this.setState(() {
+      _period = period;
     });
   }
 
@@ -135,7 +144,19 @@ class MainScreenState extends AppBaseState<MainScreen> {
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 12.0, vertical: 6.0),
-                              child: Text('Current Interval: $_interval'),
+                              child: Text('Current Symbol: $_symbol'),
+                            ),
+                            SelectForm(
+                              fieldName: 'Period',
+                              values: Future<List<String>>.value(
+                                  ['12d', '26d', '35d', '50d', '100d', '150d']
+                              ),
+                              handleSubmit: _handlePeriodSubmit,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12.0, vertical: 6.0),
+                              child: Text('Indicator Period: $_period'),
                             ),
                             DateRangeSelector(_dates, _handleDateSubmit),
                           ],

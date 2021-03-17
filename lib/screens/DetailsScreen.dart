@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 class DetailsScreen extends StatefulWidget {
   final String title;
   final List<Stock> stocks;
+  final String period;
   final List<GraphType> graphTypes = [
     GraphType(name: 'USD Price', defaultSelected: true, formulae: PriceData()),
     GraphType(name: 'SMA', defaultSelected: true, formulae: SMA()),
@@ -23,7 +24,7 @@ class DetailsScreen extends StatefulWidget {
     GraphType(name: 'MACDAVG', defaultSelected: false, formulae: MACDAVG()),
   ];
 
-  DetailsScreen({Key key, this.title, this.stocks}) : super(key: key);
+  DetailsScreen({Key key, this.title, this.stocks, this.period}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => DetailsScreenState();
@@ -118,5 +119,5 @@ class DetailsScreenState extends AppBaseState<DetailsScreen> {
     widget.graphTypes
       .firstWhere((graphType) => graphType.name == name)
       .formulae
-      .compute(widget.stocks);
+      .compute(widget.stocks, int.parse(widget.period.substring(0, widget.period.length - 1)));
 }
