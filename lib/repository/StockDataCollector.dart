@@ -12,7 +12,7 @@ class StockDataCollector {
 
   StockDataCollector._internal();
 
-  String _createURL(String symbol, String startDate, String endDate, String interval) {
+  String createURL(String symbol, String startDate, String endDate, String interval) {
     return "https://query1.finance.yahoo.com/v8/finance/chart/" + symbol +
         "?symbol=" + symbol +
         "&period1=" + startDate +
@@ -34,14 +34,14 @@ class StockDataCollector {
    */
   Future<List<Stock>> getPrices(String symbol, String startDate, String endDate, String interval) async {
     final response = await http.get(
-      _createURL(symbol, startDate, endDate, interval),
+      createURL(symbol, startDate, endDate, interval),
       headers: <String, String> {
         'Content-Type': 'application/json',
       },
     );
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
-      return _jsonToStocks(symbol, jsonResponse);
+      return jsonToStocks(symbol, jsonResponse);
 
     } else {
       return null;
@@ -54,7 +54,7 @@ class StockDataCollector {
    *
    * Take closing price of each day.
    */
-  List<Stock> _jsonToStocks(String symbol, dynamic jsonObject) {
+  List<Stock> jsonToStocks(String symbol, dynamic jsonObject) {
 
     List<int> timestamps = (jsonObject['chart']['result'][0]['timestamp'] as List)
         .cast<int>()
