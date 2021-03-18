@@ -1,4 +1,3 @@
-import 'package:charts_flutter/flutter.dart';
 import 'package:financial_systems_coursework/model/Point.dart';
 import 'package:financial_systems_coursework/model/Stock.dart';
 import 'package:financial_systems_coursework/model/formulae/Formulae.dart';

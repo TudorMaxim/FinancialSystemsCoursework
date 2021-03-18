@@ -42,34 +42,45 @@ class MainScreenState extends AppBaseState<MainScreen> {
       showAlertDialog(context, 'Error',
           'Could not fetch data about $_symbol!\nPlease check your internet connection!');
     } else if (_getFABStatus()) {
-      final DateTime _startMidnight = DateTime(
-          _dates.first.year, _dates.first.month, _dates.first.day, 0, 1);
-      final DateTime _endMidnight = DateTime(
-          _dates.last.year, _dates.last.month, _dates.last.day, 23, 59);
-      final int _startStamp = (_startMidnight.millisecondsSinceEpoch ~/ 1000);
-      final int _endStamp = (_endMidnight.millisecondsSinceEpoch ~/ 1000);
-      List<Stock> _stocks = await StockDataProvider()
-          .getPrices(_symbol.trim(), _startStamp, _endStamp, _interval);
-      debugPrint('Found ${_stocks.length} stocks.');
-      if (_stocks != null && _stocks.length != 0) {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-              builder: (context) =>
-                  DetailsScreen(title: 'Stock Details', stocks: _stocks, period: _period)),
-        );
+        final DateTime _startMidnight = DateTime(
+            _dates.first.year, _dates.first.month, _dates.first.day, 0, 1);
+        final DateTime _endMidnight = DateTime(
+            _dates.last.year, _dates.last.month, _dates.last.day, 23, 59);
+        final int _startStamp = (_startMidnight.millisecondsSinceEpoch ~/ 1000);
+        final int _endStamp = (_endMidnight.millisecondsSinceEpoch ~/ 1000);
+        List<Stock> _stocks = await StockDataProvider()
+            .getPrices(_symbol.trim(), _startStamp, _endStamp, _interval);
+        debugPrint('Found ${_stocks.length} stocks.');
+        if (_stocks != null && _stocks.length != 0) {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (context) =>
+                    DetailsScreen(title: 'Stock Details',
+                        stocks: _stocks,
+                        period: _period)),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content:
+            Text('No data points in your selected interval and date range!'),
+            duration: Duration(seconds: 2),
+          ));
+        }
+    } else {
+      if (!_validatePeriodLength()) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content:
+          Text('Not enough stocks for the selected date range!'),
+          duration: Duration(seconds: 2),
+        ));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content:
-              Text('No data points in your selected interval and date range!'),
+          Text(
+              'Please select the symbol, interval, indicator period and a valid date range'),
           duration: Duration(seconds: 2),
         ));
       }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content:
-            Text('Please select the symbol, interval, indicator period and a valid date range'),
-        duration: Duration(seconds: 2),
-      ));
     }
   }
 
@@ -98,7 +109,11 @@ class MainScreenState extends AppBaseState<MainScreen> {
   }
 
   bool _getFABStatus() {
-    return _symbol != '' && _dates != null && _dates.length == 2 && _period != '';
+    return _symbol != '' && _dates != null && _dates.length == 2 && _period != '' && _validatePeriodLength();
+  }
+
+  bool _validatePeriodLength() {
+    return _dates.last.difference(_dates.first).inDays >= int.parse(_period.substring(0, _period.length - 1));
   }
 
   @override

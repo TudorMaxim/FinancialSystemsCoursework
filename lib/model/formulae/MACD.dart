@@ -16,9 +16,12 @@ class MACD implements Formulae {
     List<Point> indicators = [Point(stocks.first.currentMarketPrice, stocks.first.timestamp),
     ];
 
-    List<Point> shortEMA = new EMA().compute(stocks, 12);
-    List<Point> longEMA = new EMA().compute(stocks, 26);
-    for (int i = 11; i < stocks.length; i++) {
+    int shortEMAPeriod = 12;
+    int longEMAPeriod = 26;
+
+    List<Point> shortEMA = new EMA().compute(stocks, shortEMAPeriod);
+    List<Point> longEMA = new EMA().compute(stocks, longEMAPeriod);
+    for (int i = 0; i < stocks.length; i++) {
       double macdValue = shortEMA[i].value - longEMA[i].value;
       indicators.add(Point(macdValue, stocks[i].timestamp));
     }
