@@ -8,7 +8,7 @@ import 'EMA.dart';
 
 class MACDAVG implements Formulae {
   @override
-  List<Point> compute(List<Stock> stocks, int period) {
+  List<Point> compute(List<Stock> stocks, int period, int startIndex) {
     if (stocks.length < period) {
       throw new ErrorDescription("Period must be smalled than the number of stocks");
     }
@@ -16,15 +16,14 @@ class MACDAVG implements Formulae {
     if (stocks.isEmpty) return [];
 
     MACD macd =  new MACD();
-    List<Point> macdPoints = macd.compute(stocks, period);
+    List<Point> macdPoints = macd.compute(stocks, period, startIndex);
     List<Point> indicators = [Point(macdPoints.first.value, macdPoints.first.timestamp),
     ];
 
     List<Stock> macdStocks = this.pointsToStocks(macdPoints, stocks.first.symbol);
+    List<Point> signalEma = new EMA().compute(macdStocks, 9, startIndex);
 
-    List<Point> signalEma = new EMA().compute(macdStocks, 9);
-
-    for (int i = 0; i < macdPoints.length; i++) {
+    for (int i = 0; i < signalEma.length; i++) {
       indicators.add(Point((macdPoints[i].value - signalEma[i].value), macdPoints[i].timestamp));
     }
     indicators.removeAt(0);

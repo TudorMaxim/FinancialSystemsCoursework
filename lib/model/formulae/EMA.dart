@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 
 class EMA implements Formulae {
   @override
-  List<Point> compute(List<Stock> stocks, int period) {
+  List<Point> compute(List<Stock> stocks, int period, int startIndex) {
     if (stocks.length < period) {
       throw new ErrorDescription("Period must be smalled than the number of stocks");
     }
@@ -21,6 +21,11 @@ class EMA implements Formulae {
       double currentEMA = ((stocks[i].currentMarketPrice - indicators[i - 1].value) * multiplier) + indicators[i - 1].value;
       indicators.add(Point(currentEMA, stocks[i].timestamp));
     }
-    return indicators;
+
+    // if we compute signal EMA, we don't need the starting index
+    if (period == 9) {
+      return indicators;
+    }
+    return indicators.sublist(startIndex);
   }
 }

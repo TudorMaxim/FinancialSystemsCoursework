@@ -42,12 +42,22 @@ class MainScreenState extends AppBaseState<MainScreen> {
       showAlertDialog(context, 'Error',
           'Could not fetch data about $_symbol!\nPlease check your internet connection!');
     } else if (_getFABStatus()) {
+        // there is no data for weekend or for some days
+        // hence we need to pull more data to be sure that we got enough to cover the previous period
+        int periodMarginError = 42;
+        final DateTime startDatePeriod = _dates.first.subtract(Duration(days: int.parse(_period.substring(0, _period.length - 1)) + periodMarginError));
+
         final DateTime _startMidnight = DateTime(
             _dates.first.year, _dates.first.month, _dates.first.day, 0, 1);
         final DateTime _endMidnight = DateTime(
             _dates.last.year, _dates.last.month, _dates.last.day, 23, 59);
-        final int _startStamp = (_startMidnight.millisecondsSinceEpoch ~/ 1000);
+        final DateTime _periodPullingDate = DateTime(
+            startDatePeriod.year, startDatePeriod.month, startDatePeriod.day, 0, 1);
+
+        final int _startDate = (_startMidnight.millisecondsSinceEpoch);
+        final int _startStamp = (_periodPullingDate.millisecondsSinceEpoch ~/ 1000);
         final int _endStamp = (_endMidnight.millisecondsSinceEpoch ~/ 1000);
+
         List<Stock> _stocks = await StockDataProvider()
             .getPrices(_symbol.trim(), _startStamp, _endStamp, _interval);
         debugPrint('Found ${_stocks.length} stocks.');
@@ -57,7 +67,8 @@ class MainScreenState extends AppBaseState<MainScreen> {
                 builder: (context) =>
                     DetailsScreen(title: 'Stock Details',
                         stocks: _stocks,
-                        period: _period)),
+                        period: _period,
+                        startDate: _startDate)),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
