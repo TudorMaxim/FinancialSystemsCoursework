@@ -34,7 +34,7 @@ class MACDAVG implements Formulae {
   List<Stock> pointsToStocks(List<Point> points, String symbol) {
     List<Stock> stocks = List.empty(growable: true);
     for (int i = 0; i < points.length; i ++) {
-      stocks.add(Stock(symbol, points[i].timestamp, points[i].value));
+      stocks.add(Stock(symbol: symbol, timestamp: points[i].timestamp, currentMarketPrice: points[i].value));
     }
 
     return stocks;

@@ -3,33 +3,57 @@ class Stock {
   int timestamp;
   double currentMarketPrice;
 
-  Stock(String symbol, int timestamp, double currentMarketPrice) {
-    this.symbol = symbol;
-    this.timestamp = timestamp;
-    this.currentMarketPrice = currentMarketPrice;
+  Stock({this.symbol, this.timestamp, this.currentMarketPrice});
+
+  Stock.fromMap(Map<String, dynamic> map) {
+    this.symbol = map['symbol'];
+    this.timestamp = map['timestamp'];
+    this.currentMarketPrice = map['currentMarketPrice'];
   }
 
-  String getSymbol() {
-    return this.symbol;
+  Map<String, dynamic> toMap() {
+    final Map<String, dynamic> map = {
+      'symbol': this.symbol,
+      'timestamp': this.timestamp,
+      'currentMarketPrice': this.currentMarketPrice
+    };
+    return map;
   }
 
-  int getTimeStamp() {
-    return this.timestamp;
+  @override
+  String toString() {
+    return '$symbol at $currentMarketPrice on $timestamp';
   }
 
-  double getCurrentMarketPrice() {
-    return this.currentMarketPrice;
-  }
+  /**
+   * Create stock objects from collected data.
+   *
+   * Take closing price of each day.
+   */
+  static List<Stock> jsonToStocks(
+      String symbol, Map<String, dynamic> jsonObject) {
+    List<int> timestamps = (jsonObject['chart']['result'][0]['timestamp']
+            as List)
+        .cast<int>()
+        .map((timestamp) =>
+            timestamp * 1000) // convert timestamps to millisecondsSinceEpoch.
+        .toList();
+    List<double> prices = (jsonObject['chart']['result'][0]['indicators']
+            ['quote'][0]['close'] as List)
+        .cast<double>()
+        .toList();
 
-  void setSymbol(String symbol) {
-    this.symbol = symbol;
-  }
+    List<Stock> stockList = List.empty(growable: true);
 
-  void setTimestamp(int timestamp) {
-    this.timestamp = timestamp;
-  }
+    for (int i = 0; i < timestamps.length; ++i) {
+      if (prices[i] != null) {
+        stockList.add(Stock(
+            symbol: symbol,
+            timestamp: timestamps[i],
+            currentMarketPrice: prices[i]));
+      }
+    }
 
-  void setCurrentMarketPrice(double currentMarketPrice) {
-    this.currentMarketPrice = currentMarketPrice;
+    return stockList;
   }
 }

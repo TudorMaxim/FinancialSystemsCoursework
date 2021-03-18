@@ -11,7 +11,6 @@ class IAppState {
 }
 
 class AppBaseState<T extends StatefulWidget> extends State<T> with IAppState {
-
   @override
   void initState() {
     super.initState();
@@ -21,17 +20,17 @@ class AppBaseState<T extends StatefulWidget> extends State<T> with IAppState {
   @override
   Widget build(BuildContext context) => null;
 
-  String getConnectionString() => (
-    this.connected ? '' : 'You are offline!'
-  );
+  String getConnectionString() => (this.connected ? '' : 'You are offline!');
 
   setupConnectionListener() async {
     bool conn = await checkConnection();
     setState(() {
       connected = conn;
     });
-    connectivityListener = Connectivity().onConnectivityChanged.listen((result) async {
-      bool connected = result == ConnectivityResult.mobile || result == ConnectivityResult.wifi;
+    connectivityListener =
+        Connectivity().onConnectivityChanged.listen((result) async {
+      bool connected = result == ConnectivityResult.mobile ||
+          result == ConnectivityResult.wifi;
       if (connected != this.connected) {
         setState(() {
           this.connected = connected;
@@ -53,7 +52,7 @@ class AppBaseState<T extends StatefulWidget> extends State<T> with IAppState {
   Widget renderWithLoader(Widget body) {
     return Visibility(
       visible: this.isFetching,
-      child: Center (
+      child: Center(
         child: CircularProgressIndicator(),
       ),
       replacement: body,
@@ -69,7 +68,7 @@ class AppBaseState<T extends StatefulWidget> extends State<T> with IAppState {
           title: new Text(title),
           content: new Text(message),
           actions: <Widget>[
-            new FlatButton(
+            new TextButton(
               child: new Text("Close"),
               onPressed: () {
                 Navigator.of(context).pop();

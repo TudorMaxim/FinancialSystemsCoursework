@@ -1,9 +1,6 @@
-import 'dart:convert';
-import 'package:financial_systems_coursework/model/Stock.dart';
 import 'package:http/http.dart' as http;
 
 class StockDataCollector {
-
   static final StockDataCollector _instance = StockDataCollector._internal();
 
   factory StockDataCollector() {
@@ -12,12 +9,18 @@ class StockDataCollector {
 
   StockDataCollector._internal();
 
-  String _createURL(String symbol, String startDate, String endDate, String interval) {
-    return "https://query1.finance.yahoo.com/v8/finance/chart/" + symbol +
-        "?symbol=" + symbol +
-        "&period1=" + startDate +
-        "&period2=" + endDate +
-        "&interval=" + interval;
+  String _createURL(
+      String symbol, String startDate, String endDate, String interval) {
+    return "https://query1.finance.yahoo.com/v8/finance/chart/" +
+        symbol +
+        "?symbol=" +
+        symbol +
+        "&period1=" +
+        startDate +
+        "&period2=" +
+        endDate +
+        "&interval=" +
+        interval;
   }
 
   /**
@@ -32,47 +35,18 @@ class StockDataCollector {
    * Corresponding URL:
    *    https://query1.finance.yahoo.com/v8/finance/chart/AAPL?symbol=AAPL&period1=1612437713&period2=1614856913&interval=1d
    */
-  Future<List<Stock>> getPrices(String symbol, String startDate, String endDate, String interval) async {
+  Future<String> getPricesAsJSON(
+      String symbol, String startDate, String endDate, String interval) async {
     final response = await http.get(
       _createURL(symbol, startDate, endDate, interval),
-      headers: <String, String> {
+      headers: <String, String>{
         'Content-Type': 'application/json',
       },
     );
     if (response.statusCode == 200) {
-      var jsonResponse = jsonDecode(response.body);
-      return _jsonToStocks(symbol, jsonResponse);
-
+      return response.body;
     } else {
       return null;
     }
-
   }
-
-  /**
-   * Create stock objects from collected data.
-   *
-   * Take closing price of each day.
-   */
-  List<Stock> _jsonToStocks(String symbol, dynamic jsonObject) {
-
-    List<int> timestamps = (jsonObject['chart']['result'][0]['timestamp'] as List)
-        .cast<int>()
-        .map((timestamp) => timestamp * 1000) // convert timestamps to millisecondsSinceEpoch.
-        .toList();
-    List<double> prices = (jsonObject['chart']['result'][0]['indicators']['quote'][0]['close'] as List)
-        .cast<double>()
-        .toList();
-
-    List<Stock> stockList = List.empty(growable: true);
-
-    for (int i = 0 ; i < timestamps.length; ++i) {
-      if (prices[i] != null) {
-        stockList.add(new Stock(symbol, timestamps[i], prices[i]));
-      }
-    }
-
-    return stockList;
-  }
-
 }
