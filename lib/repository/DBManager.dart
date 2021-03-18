@@ -11,7 +11,6 @@ class StockDBEntry {
   String ticker;
   int fromTimestamp;
   int toTimestamp;
-  StockInterval interval;
   String values;
 
   StockDBEntry(
@@ -19,7 +18,6 @@ class StockDBEntry {
       this.ticker,
       this.fromTimestamp,
       this.toTimestamp,
-      this.interval,
       this.values});
 
   StockDBEntry.fromMap(Map<String, dynamic> map) {
@@ -27,7 +25,6 @@ class StockDBEntry {
     this.ticker = map['ticker'];
     this.fromTimestamp = map['fromTimestamp'];
     this.toTimestamp = map['toTimestamp'];
-    this.interval = IntervalMapping.fromString(map['interval']);
     this.values = map['jsonValues'];
   }
 
@@ -36,7 +33,6 @@ class StockDBEntry {
       'ticker': this.ticker,
       'fromTimestamp': this.fromTimestamp,
       'toTimestamp': this.toTimestamp,
-      'interval': this.interval.name,
       'jsonValues': this.values
     };
     if (this.id != -1) {
@@ -47,7 +43,7 @@ class StockDBEntry {
 
   @override
   String toString() {
-    return 'Stock DB Entry{ ticker: $ticker, id: $id, from: $fromTimestamp, to: $toTimestamp, interval: ${interval.name}}\n';
+    return 'Stock DB Entry{ ticker: $ticker, id: $id, from: $fromTimestamp, to: $toTimestamp}\n';
   }
 }
 
@@ -73,7 +69,6 @@ class DBManager {
             ticker TEXT,
             fromTimestamp INTEGER,
             toTimestamp INTEGER,
-            interval TEXT,
             jsonValues TEXT
           )''');
     }, version: 1);
@@ -92,12 +87,11 @@ class DBManager {
   }
 
   Future<bool> isCached(
-      String ticker, int from, int to, StockInterval interval) async {
+      String ticker, int from, int to) async {
     StockDBEntry _entry = await _getByTicker(ticker);
     return _entry != null &&
         from >= _entry.fromTimestamp &&
-        to <= _entry.toTimestamp &&
-        interval == _entry.interval;
+        to <= _entry.toTimestamp;
   }
 
   Future<StockDBEntry> _getByTicker(String ticker) async {
@@ -127,8 +121,8 @@ class DBManager {
   }
 
   Future<List<Stock>> getFromDBOrNull(
-      String ticker, int from, int to, StockInterval interval) async {
-    bool _isCached = await isCached(ticker, from, to, interval);
+      String ticker, int from, int to) async {
+    bool _isCached = await isCached(ticker, from, to);
     if (!_isCached) {
       debugPrint('Cache miss for: $ticker');
       return null;
@@ -138,8 +132,7 @@ class DBManager {
     }
   }
 
-  Future<void> refreshCache(String ticker, int from, int to,
-      StockInterval interval, String values) async {
+  Future<void> refreshCache(String ticker, int from, int to, String values) async {
     Database db = await _db;
     await db.transaction((txn) async {
       await txn.delete('STOCKS', where: 'ticker = \'$ticker\'');
@@ -148,7 +141,6 @@ class DBManager {
         ticker: ticker,
         fromTimestamp: from,
         toTimestamp: to,
-        interval: interval,
         values: values);
     await db.transaction((txn) async {
       await txn.insert('STOCKS', entry.map);

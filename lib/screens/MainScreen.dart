@@ -5,7 +5,6 @@ import 'package:financial_systems_coursework/repository/SymbolManager.dart';
 import 'package:financial_systems_coursework/screens/DetailsScreen.dart';
 import 'package:financial_systems_coursework/shared/AppBaseState.dart';
 import 'package:financial_systems_coursework/model/Stock.dart';
-import 'package:financial_systems_coursework/shared/interval.dart';
 import 'package:financial_systems_coursework/widgets/DateRangeSelector.dart';
 import 'package:financial_systems_coursework/widgets/SelectForm.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,7 +20,6 @@ class MainScreen extends StatefulWidget {
 
 class MainScreenState extends AppBaseState<MainScreen> {
   String _symbol;
-  StockInterval _interval;
   String _period;
   List<DateTime> _dates;
 
@@ -29,7 +27,6 @@ class MainScreenState extends AppBaseState<MainScreen> {
     super.initState();
     _symbol = '';
     _period = '';
-    _interval = StockInterval.i1d;
     _dates = _getInitRange();
   }
 
@@ -54,12 +51,11 @@ class MainScreenState extends AppBaseState<MainScreen> {
         final DateTime _periodPullingDate = DateTime(
             startDatePeriod.year, startDatePeriod.month, startDatePeriod.day, 0, 1);
 
-        final int _startDate = (_startMidnight.millisecondsSinceEpoch);
         final int _startStamp = (_periodPullingDate.millisecondsSinceEpoch ~/ 1000);
         final int _endStamp = (_endMidnight.millisecondsSinceEpoch ~/ 1000);
 
         List<Stock> _stocks = await StockDataProvider()
-            .getPrices(_symbol.trim(), _startStamp, _endStamp, _interval);
+            .getPrices(_symbol.trim(), _startStamp, _endStamp);
         debugPrint('Found ${_stocks.length} stocks.');
         if (_stocks != null && _stocks.length != 0) {
           Navigator.of(context).push(
@@ -68,12 +64,12 @@ class MainScreenState extends AppBaseState<MainScreen> {
                     DetailsScreen(title: 'Stock Details',
                         stocks: _stocks,
                         period: _period,
-                        startDate: _startDate)),
+                        startDate: _startMidnight)),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content:
-            Text('No data points in your selected interval and date range!'),
+            Text('No data points in your selected date range!'),
             duration: Duration(seconds: 2),
           ));
         }
@@ -88,7 +84,7 @@ class MainScreenState extends AppBaseState<MainScreen> {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content:
           Text(
-              'Please select the symbol, interval, indicator period and a valid date range'),
+              'Please select the symbol, indicator period and a valid date range'),
           duration: Duration(seconds: 2),
         ));
       }
@@ -98,12 +94,6 @@ class MainScreenState extends AppBaseState<MainScreen> {
   _handleSymbolSubmit(String symbol) {
     this.setState(() {
       _symbol = symbol;
-    });
-  }
-
-  _handleIntervalSubmit(String interval) {
-    this.setState(() {
-      _interval = IntervalMapping.fromString(interval);
     });
   }
 
@@ -164,17 +154,6 @@ class MainScreenState extends AppBaseState<MainScreen> {
                               fieldName: 'Symbol',
                               values: SymbolManager().symbols,
                               handleSubmit: _handleSymbolSubmit,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 12.0, vertical: 6.0),
-                              child: Text('Current Symbol: $_symbol'),
-                            ),
-                            SelectForm(
-                              fieldName: 'Interval',
-                              values: Future<List<String>>.value(
-                                  IntervalMapping.stringList()),
-                              handleSubmit: _handleIntervalSubmit,
                             ),
                             Padding(
                               padding: const EdgeInsets.symmetric(

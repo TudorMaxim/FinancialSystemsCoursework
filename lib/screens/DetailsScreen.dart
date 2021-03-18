@@ -16,7 +16,7 @@ class DetailsScreen extends StatefulWidget {
   final String title;
   final List<Stock> stocks;
   final String period;
-  final int startDate;
+  final DateTime startDate;
   final List<GraphType> graphTypes = [
     GraphType(name: 'USD Price', defaultSelected: true, formulae: PriceData()),
     GraphType(name: 'SMA', defaultSelected: true, formulae: SMA()),
@@ -64,9 +64,10 @@ class DetailsScreenState extends AppBaseState<DetailsScreen> {
     bool partialIndex = false;
 
     for (int i = 0; i <= widget.stocks.length - 1; i++) {
-      if (DateTime.fromMillisecondsSinceEpoch(widget.stocks[i].timestamp).toString().substring(0, 10) ==  DateTime.fromMillisecondsSinceEpoch(widget.startDate).toString().substring(0, 10)) {
+      if (DateTime.fromMillisecondsSinceEpoch(widget.stocks[i].timestamp).toString().substring(0, 10) == widget.startDate.toString().substring(0, 10)) {
         startIndex = i;
-      } else if (DateTime.fromMillisecondsSinceEpoch(widget.stocks[i].timestamp).toString().substring(0, 7) ==  DateTime.fromMillisecondsSinceEpoch(widget.startDate).toString().substring(0, 7) && !partialIndex) {
+      } else if (DateTime.fromMillisecondsSinceEpoch(widget.stocks[i].timestamp).toString().substring(0, 7) == widget.startDate.toString().substring(0, 7)
+          && !partialIndex) {
         startIndex = i;
         partialIndex = true;
       }
