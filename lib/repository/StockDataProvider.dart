@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:financial_systems_coursework/model/Stock.dart';
 import 'package:financial_systems_coursework/repository/DBManager.dart';
 import 'package:financial_systems_coursework/repository/StockDataCollector.dart';
-import 'package:financial_systems_coursework/shared/interval.dart';
 
 class StockDataProvider {
   static final StockDataProvider _instance = StockDataProvider._internal();

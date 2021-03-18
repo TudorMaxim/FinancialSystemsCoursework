@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:financial_systems_coursework/shared/interval.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
