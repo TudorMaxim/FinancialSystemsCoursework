@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 class StockDataCollector {
@@ -9,7 +10,9 @@ class StockDataCollector {
 
   StockDataCollector._internal();
 
-  String _createURL(
+
+  @visibleForTesting
+  String createURL(
       String symbol, String startDate, String endDate) {
     return "https://query1.finance.yahoo.com/v8/finance/chart/" +
         symbol +
@@ -37,7 +40,7 @@ class StockDataCollector {
   Future<String> getPricesAsJSON(
       String symbol, String startDate, String endDate) async {
     final response = await http.get(
-      _createURL(symbol, startDate, endDate),
+      createURL(symbol, startDate, endDate),
       headers: <String, String>{
         'Content-Type': 'application/json',
       },
