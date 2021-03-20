@@ -15,6 +15,8 @@ import 'package:flutter/material.dart';
 class DetailsScreen extends StatefulWidget {
   final String title;
   final List<Stock> stocks;
+  final String period;
+  final DateTime startDate;
   final List<GraphType> graphTypes = [
     GraphType(name: 'USD Price', defaultSelected: true, formulae: PriceData()),
     GraphType(name: 'SMA', defaultSelected: true, formulae: SMA()),
@@ -23,7 +25,7 @@ class DetailsScreen extends StatefulWidget {
     GraphType(name: 'MACDAVG', defaultSelected: false, formulae: MACDAVG()),
   ];
 
-  DetailsScreen({Key key, this.title, this.stocks}) : super(key: key);
+  DetailsScreen({Key key, this.title, this.stocks, this.period, this.startDate}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => DetailsScreenState();
@@ -55,6 +57,23 @@ class DetailsScreenState extends AppBaseState<DetailsScreen> {
         selectedGraphTypes[type] = !selectedGraphTypes[type];
       });
     }
+  }
+
+  int computeStartingIndex() {
+    int startIndex = 0;
+    bool partialIndex = false;
+
+    for (int i = 0; i <= widget.stocks.length - 1; i++) {
+      if (DateTime.fromMillisecondsSinceEpoch(widget.stocks[i].timestamp).toString().substring(0, 10) == widget.startDate.toString().substring(0, 10)) {
+        startIndex = i;
+      } else if (DateTime.fromMillisecondsSinceEpoch(widget.stocks[i].timestamp).toString().substring(0, 7) == widget.startDate.toString().substring(0, 7)
+          && !partialIndex) {
+        startIndex = i;
+        partialIndex = true;
+      }
+    }
+
+    return startIndex;
   }
 
   @override
@@ -118,5 +137,5 @@ class DetailsScreenState extends AppBaseState<DetailsScreen> {
     widget.graphTypes
       .firstWhere((graphType) => graphType.name == name)
       .formulae
-      .compute(widget.stocks);
+      .compute(widget.stocks, int.parse(widget.period.substring(0, widget.period.length - 1)), computeStartingIndex());
 }

@@ -1,18 +1,26 @@
 import 'package:financial_systems_coursework/model/Point.dart';
 import 'package:financial_systems_coursework/model/Stock.dart';
 import 'package:financial_systems_coursework/model/formulae/Formulae.dart';
+import 'package:flutter/cupertino.dart';
 
 class SMA implements Formulae {
   @override
-  List<Point> compute(List<Stock> stocks) {
-    if (stocks.isEmpty) return [];
-    List<Point> indicators = [
-      Point(stocks.first.currentMarketPrice, stocks.first.timestamp),
-    ];
-    for (int i = 1; i < stocks.length; i++) {
-      double currentSMA = ((indicators[i - 1].value * i) + stocks[i].currentMarketPrice) / (i + 1);
-      indicators.add(Point(currentSMA, stocks[i].timestamp));
+  List<Point> compute(List<Stock> stocks, int period, int startIndex) {
+    if (stocks.length < period) {
+      throw new ErrorDescription("Period must be smalled than the number of stocks");
     }
-    return indicators;
+
+    List<Point> indicators = new List.filled(stocks.length, Point(stocks.first.currentMarketPrice, stocks.first.timestamp), growable: true);
+
+    for (int i = startIndex; i <= stocks.length - 1; i++) {
+      double sum = 0;
+      for (int j = i - period; j < i; j++) {
+        sum += stocks[j].currentMarketPrice;
+      }
+      double currentSMA = sum / period;
+
+      indicators[i] = Point(currentSMA, stocks[i - 1].timestamp);
+    }
+    return indicators.sublist(startIndex);
   }
 }

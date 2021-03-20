@@ -3,6 +3,6 @@ import '../Point.dart';
 
 abstract class Formulae {
 
-  List<Point> compute(List<Stock> stocks);
+  List<Point> compute(List<Stock> stocks, int period, int startDate);
 
 }

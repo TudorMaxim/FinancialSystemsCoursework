@@ -10,7 +10,7 @@ void main() {
   /// Test createURL
   test("Craft URL correctly", (){
     String expected = "https://query1.finance.yahoo.com/v8/finance/chart/AAPL?symbol=AAPL&period1=1612437713&period2=1614856913&interval=1d";
-    String actual = new StockDataCollector().createURL("AAPL", "1612437713", "1614856913", "1d");
+    String actual = new StockDataCollector().createURL("AAPL", "1612437713", "1614856913");
 
     expect(actual, expected);
   });
@@ -18,7 +18,7 @@ void main() {
   /// Test getPricesAsJSON
   test("Check JSON response from web", () async {
     final response = await http.get(
-      new StockDataCollector().createURL("AAPL", "1612437713", "1614856913", "1d"),
+      new StockDataCollector().createURL("AAPL", "1612437713", "1614856913"),
       headers: <String, String>{
         'Content-Type': 'application/json',
       },
@@ -32,7 +32,7 @@ void main() {
     List<Stock> actualStocks = Stock.jsonToStocks("AAPL", jsonDecode(actual));
 
     /// Craft expected
-    String expected = await new StockDataCollector().getPricesAsJSON("AAPL", "1612437713", "1614856913", "1d");
+    String expected = await new StockDataCollector().getPricesAsJSON("AAPL", "1612437713", "1614856913");
     List<Stock> expectedStocks = Stock.jsonToStocks("AAPL", jsonDecode(expected));
 
     /// Check that stock lists have the same sizes

@@ -10,9 +10,10 @@ class StockDataCollector {
 
   StockDataCollector._internal();
 
+
   @visibleForTesting
   String createURL(
-      String symbol, String startDate, String endDate, String interval) {
+      String symbol, String startDate, String endDate) {
     return "https://query1.finance.yahoo.com/v8/finance/chart/" +
         symbol +
         "?symbol=" +
@@ -21,8 +22,7 @@ class StockDataCollector {
         startDate +
         "&period2=" +
         endDate +
-        "&interval=" +
-        interval;
+        "&interval=1d";
   }
 
   /**
@@ -38,9 +38,9 @@ class StockDataCollector {
    *    https://query1.finance.yahoo.com/v8/finance/chart/AAPL?symbol=AAPL&period1=1612437713&period2=1614856913&interval=1d
    */
   Future<String> getPricesAsJSON(
-      String symbol, String startDate, String endDate, String interval) async {
+      String symbol, String startDate, String endDate) async {
     final response = await http.get(
-      createURL(symbol, startDate, endDate, interval),
+      createURL(symbol, startDate, endDate),
       headers: <String, String>{
         'Content-Type': 'application/json',
       },
