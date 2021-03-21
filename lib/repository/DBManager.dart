@@ -84,8 +84,7 @@ class DBManager {
     return _db;
   }
 
-  Future<bool> isCached(
-      String ticker, int from, int to) async {
+  Future<bool> isCached(String ticker, int from, int to) async {
     StockDBEntry _entry = await _getByTicker(ticker);
     return _entry != null &&
         from >= _entry.fromTimestamp &&
@@ -118,8 +117,7 @@ class DBManager {
     return res;
   }
 
-  Future<List<Stock>> getFromDBOrNull(
-      String ticker, int from, int to) async {
+  Future<List<Stock>> getFromDBOrNull(String ticker, int from, int to) async {
     bool _isCached = await isCached(ticker, from, to);
     if (!_isCached) {
       debugPrint('Cache miss for: $ticker');
@@ -130,16 +128,14 @@ class DBManager {
     }
   }
 
-  Future<void> refreshCache(String ticker, int from, int to, String values) async {
+  Future<void> refreshCache(
+      String ticker, int from, int to, String values) async {
     Database db = await _db;
     await db.transaction((txn) async {
       await txn.delete('STOCKS', where: 'ticker = \'$ticker\'');
     });
     StockDBEntry entry = StockDBEntry(
-        ticker: ticker,
-        fromTimestamp: from,
-        toTimestamp: to,
-        values: values);
+        ticker: ticker, fromTimestamp: from, toTimestamp: to, values: values);
     await db.transaction((txn) async {
       await txn.insert('STOCKS', entry.map);
     });

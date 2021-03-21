@@ -11,7 +11,9 @@ class StocksApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MainScreen(title: 'Select Stock',),
+      home: MainScreen(
+        title: 'Select Stock',
+      ),
     );
   }
 }

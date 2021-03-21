@@ -12,13 +12,11 @@ class StockDataProvider {
     return _instance;
   }
 
-  Future<List<Stock>> getPrices(
-      String ticker, int from, int to) async {
-    List<Stock> _fromDB =
-        await DBManager().getFromDBOrNull(ticker, from, to);
+  Future<List<Stock>> getPrices(String ticker, int from, int to) async {
+    List<Stock> _fromDB = await DBManager().getFromDBOrNull(ticker, from, to);
     if (_fromDB == null) {
-      String stocksJSON = await StockDataCollector().getPricesAsJSON(
-          ticker, from.toString(), to.toString());
+      String stocksJSON = await StockDataCollector()
+          .getPricesAsJSON(ticker, from.toString(), to.toString());
       await DBManager().refreshCache(ticker, from, to, stocksJSON);
       return Stock.jsonToStocks(ticker, jsonDecode(stocksJSON));
     } else {

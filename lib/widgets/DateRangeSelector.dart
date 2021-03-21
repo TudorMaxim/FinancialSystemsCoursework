@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -35,8 +34,8 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
     Navigator.of(context).pop();
     if (_dates != null && _dates.first != null && _dates.last != null) {
       if (_dates.last
-          .difference(_dates.first)
-          .compareTo(Duration(days: 365 * 2)) ==
+              .difference(_dates.first)
+              .compareTo(Duration(days: 365 * 2)) ==
           1) {
         debugPrint('Range larger than 2 years selected!');
         this.setState(() {
@@ -73,7 +72,7 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
                 minDate: DateTime.now().subtract(Duration(days: 365 * 5)),
                 maxDate: DateTime.now(),
                 initialSelectedRange:
-                PickerDateRange(_dates.first, _dates.last),
+                    PickerDateRange(_dates.first, _dates.last),
               ),
             ),
             actions: [
@@ -104,7 +103,7 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
           ),
           Padding(
             padding:
-            const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
             child: Text('Start: ${DateFormat.yMd().format(_dates.first)}'),
           ),
           VerticalDivider(
@@ -112,7 +111,7 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
           ),
           Padding(
             padding:
-            const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
             child: Text('End: ${DateFormat.yMd().format(_dates.last)}'),
           ),
           VerticalDivider(
@@ -120,7 +119,7 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
           ),
           Padding(
             padding:
-            const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
             child: Text('$_durr days currently selected'),
           ),
           VerticalDivider(
@@ -128,7 +127,7 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
           ),
           Padding(
             padding:
-            const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
             child: Text(
               _err
                   ? 'Please select a valid date range!\n(less then two years)'
