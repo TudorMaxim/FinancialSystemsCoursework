@@ -6,6 +6,7 @@ import 'package:financial_systems_coursework/screens/DetailsScreen.dart';
 import 'package:financial_systems_coursework/shared/AppBaseState.dart';
 import 'package:financial_systems_coursework/model/Stock.dart';
 import 'package:financial_systems_coursework/widgets/DateRangeSelector.dart';
+import 'package:financial_systems_coursework/widgets/InlineBold.dart';
 import 'package:financial_systems_coursework/widgets/SelectForm.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -132,54 +133,65 @@ class MainScreenRouteState extends AppBaseState<MainScreenRoute> {
           preferredSize: Size.fromHeight(0),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Container(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Center(
-              child: Wrap(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Theme.of(context).primaryColor,
-                          width: 3.0,
+      body: Container(
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+              Colors.blue[800],
+              Colors.lightBlue[100],
+            ])),
+        child: Padding(
+          padding: const EdgeInsets.all(24.0),
+          child: Container(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Center(
+                child: Wrap(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.blueGrey[100],
+                            width: 3.0,
+                          ),
+                          borderRadius: BorderRadius.circular(6.0),
+                          color: Colors.white),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            SelectForm(
+                              fieldName: 'Ticker',
+                              values: TickerManager().tickers,
+                              handleSubmit: _handleTickerSubmit,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12.0, vertical: 10.0),
+                              child: InlineBold('Current Ticker: ', _ticker),
+                            ),
+                            SelectForm(
+                              fieldName: 'Period',
+                              values: Future<List<String>>.value(
+                                  ['12d', '26d', '35d', '50d', '100d', '150d']),
+                              handleSubmit: _handlePeriodSubmit,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 12.0, vertical: 10.0),
+                              child: InlineBold('Indicator Period: ', _period),
+                            ),
+                            DateRangeSelector(_dates, _handleDateSubmit),
+                          ],
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                         ),
-                        borderRadius: BorderRadius.circular(6.0)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          SelectForm(
-                            fieldName: 'Ticker',
-                            values: TickerManager().tickers,
-                            handleSubmit: _handleTickerSubmit,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12.0, vertical: 6.0),
-                            child: Text('Current Ticker: $_ticker'),
-                          ),
-                          SelectForm(
-                            fieldName: 'Period',
-                            values: Future<List<String>>.value(
-                                ['12d', '26d', '35d', '50d', '100d', '150d']),
-                            handleSubmit: _handlePeriodSubmit,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 12.0, vertical: 6.0),
-                            child: Text('Indicator Period: $_period'),
-                          ),
-                          DateRangeSelector(_dates, _handleDateSubmit),
-                        ],
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

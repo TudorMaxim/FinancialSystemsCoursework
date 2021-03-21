@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
+import 'package:financial_systems_coursework/widgets/InlineBold.dart';
+
 class DateRangeSelector extends StatefulWidget {
   final Function _handleDateSubmit;
   final List<DateTime> _initDates;
@@ -98,32 +100,20 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
             onPressed: () => _onShowDialog(context),
             child: Text('Pick Date Range'),
           ),
-          VerticalDivider(
-            width: 12.0,
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0),
+            child: InlineBold('Start: ', DateFormat.yMd().format(_dates.first)),
+          ),
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0),
+            child: InlineBold('End: ', DateFormat.yMd().format(_dates.last)),
           ),
           Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
-            child: Text('Start: ${DateFormat.yMd().format(_dates.first)}'),
-          ),
-          VerticalDivider(
-            width: 12.0,
-          ),
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
-            child: Text('End: ${DateFormat.yMd().format(_dates.last)}'),
-          ),
-          VerticalDivider(
-            width: 12.0,
-          ),
-          Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
-            child: Text('$_durr days currently selected'),
-          ),
-          VerticalDivider(
-            width: 12.0,
+            child: InlineBold('Days selected: ', '$_durr'),
           ),
           Padding(
             padding:
