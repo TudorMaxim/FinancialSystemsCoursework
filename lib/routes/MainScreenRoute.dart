@@ -2,7 +2,7 @@ import 'dart:core';
 
 import 'package:financial_systems_coursework/repository/StockDataProvider.dart';
 import 'package:financial_systems_coursework/repository/TickerManager.dart';
-import 'package:financial_systems_coursework/screens/DetailsScreen.dart';
+import 'package:financial_systems_coursework/routes/DetailsScreenRoute.dart';
 import 'package:financial_systems_coursework/shared/AppBaseState.dart';
 import 'package:financial_systems_coursework/model/Stock.dart';
 import 'package:financial_systems_coursework/widgets/DateRangeSelector.dart';
@@ -13,8 +13,8 @@ import 'package:flutter/material.dart';
 
 class MainScreenRoute extends StatefulWidget {
   static final routeName = '/';
-  final String title;
-  MainScreenRoute({Key key, this.title}) : super(key: key);
+  final String title = 'Select Stock';
+  MainScreenRoute({Key key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => MainScreenRouteState();
@@ -24,6 +24,11 @@ class MainScreenRouteState extends AppBaseState<MainScreenRoute> {
   String _ticker;
   String _period;
   List<DateTime> _dates;
+
+  static final String _alertTitle = 'Error';
+  static final String _alertCheckInternet1 = 'Could not fetch data about ';
+  static final String _alertCheckInternet2 =
+      '\nPlease check your internet connection!';
 
   void initState() {
     super.initState();
@@ -38,8 +43,8 @@ class MainScreenRouteState extends AppBaseState<MainScreenRoute> {
 
   void handlePress(BuildContext context) async {
     if (!connected) {
-      showAlertDialog(context, 'Error',
-          'Could not fetch data about $_ticker!\nPlease check your internet connection!');
+      showAlertDialog(context, _alertTitle,
+          _alertCheckInternet1 + _ticker + _alertCheckInternet2);
     } else if (_getFABStatus()) {
       // there is no data for weekend or for some days
       // hence we need to pull more data to be sure that we got enough to cover the previous period
@@ -64,8 +69,8 @@ class MainScreenRouteState extends AppBaseState<MainScreenRoute> {
       debugPrint('Found ${_stocks.length} stocks.');
       if (_stocks != null && _stocks.length != 0) {
         Navigator.of(context).pushNamed('/details',
-            arguments: DetailsScreenArguments(
-                'Stock Details', _period, _stocks, _startMidnight));
+            arguments:
+                DetailsScreenArguments(_period, _stocks, _startMidnight));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('No data points in your selected date range!'),

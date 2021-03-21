@@ -10,8 +10,9 @@ void main() {
   test("Craft URL correctly", () {
     String expected =
         "https://query1.finance.yahoo.com/v8/finance/chart/AAPL?symbol=AAPL&period1=1612437713&period2=1614856913&interval=1d";
-    String actual =
-        new StockDataCollector().createURL("AAPL", "1612437713", "1614856913");
+    String actual = new StockDataCollector()
+        .createURL("AAPL", "1612437713", "1614856913")
+        .toString();
 
     expect(actual, expected);
   });

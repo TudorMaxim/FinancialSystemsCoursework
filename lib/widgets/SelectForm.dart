@@ -15,7 +15,7 @@ class SelectForm extends StatefulWidget {
 
 class _SelectFormState extends State<SelectForm> {
   final TextEditingController _ctr = TextEditingController();
-  String _currentValue = "";
+  String _currentValue = '';
 
   @override
   void initState() {

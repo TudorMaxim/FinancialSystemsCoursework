@@ -46,6 +46,15 @@ class StockDBEntry {
 }
 
 class DBManager {
+  static final String _createDBSQL = '''CREATE TABLE STOCKS(
+            id INTEGER PRIMARY KEY,
+            ticker TEXT,
+            fromTimestamp INTEGER,
+            toTimestamp INTEGER,
+            jsonValues TEXT
+          )''';
+  static final _stocksTable = 'STOCKS';
+
   static final DBManager _instance = DBManager._init();
   Future<Database> _db;
   final String _dbName = 'stocksApp.db';
@@ -62,13 +71,7 @@ class DBManager {
   Future<Database> _initDB() async {
     Database db = await openDatabase(join(await getDatabasesPath(), _dbName),
         onCreate: (db, version) async {
-      await db.execute('''CREATE TABLE STOCKS(
-            id INTEGER PRIMARY KEY,
-            ticker TEXT,
-            fromTimestamp INTEGER,
-            toTimestamp INTEGER,
-            jsonValues TEXT
-          )''');
+      await db.execute(_createDBSQL);
     }, version: 1);
     debugPrint('Database has been created!');
     return db;
@@ -95,7 +98,7 @@ class DBManager {
     Database db = await _db;
     return await db.transaction((txn) async {
       List<Map<String, dynamic>> maps =
-          await txn.query('STOCKS', where: 'ticker = \'$ticker\'');
+          await txn.query(_stocksTable, where: 'ticker = \'$ticker\'');
       if (maps.isEmpty) {
         return null;
       } else {
@@ -132,12 +135,12 @@ class DBManager {
       String ticker, int from, int to, String values) async {
     Database db = await _db;
     await db.transaction((txn) async {
-      await txn.delete('STOCKS', where: 'ticker = \'$ticker\'');
+      await txn.delete(_stocksTable, where: 'ticker = \'$ticker\'');
     });
     StockDBEntry entry = StockDBEntry(
         ticker: ticker, fromTimestamp: from, toTimestamp: to, values: values);
     await db.transaction((txn) async {
-      await txn.insert('STOCKS', entry.map);
+      await txn.insert(_stocksTable, entry.map);
     });
     debugPrint('Cache for $ticker has been refreshed.');
   }
@@ -145,7 +148,7 @@ class DBManager {
   Future<void> printCache() async {
     Database db = await _db;
     List<Map<String, dynamic>> maps = await db.transaction((txn) async {
-      return await txn.query('STOCKS');
+      return await txn.query(_stocksTable);
     });
     debugPrint(maps.toString());
   }

@@ -4,6 +4,8 @@ import 'package:http/http.dart' as http;
 class StockDataCollector {
   static final StockDataCollector _instance = StockDataCollector._internal();
 
+  static final _authority = 'query1.finance.yahoo.com';
+  static final _unencodedPath = '/v8/finance/chart/';
   factory StockDataCollector() {
     return _instance;
   }
@@ -11,16 +13,13 @@ class StockDataCollector {
   StockDataCollector._internal();
 
   @visibleForTesting
-  String createURL(String ticker, String startDate, String endDate) {
-    return "https://query1.finance.yahoo.com/v8/finance/chart/" +
-        ticker +
-        "?symbol=" +
-        ticker +
-        "&period1=" +
-        startDate +
-        "&period2=" +
-        endDate +
-        "&interval=1d";
+  Uri createURL(String ticker, String startDate, String endDate) {
+    return Uri.https(_authority, _unencodedPath + ticker, {
+      'symbol': ticker,
+      'period1': startDate,
+      'period2': endDate,
+      'interval': '1d'
+    });
   }
 
   /// ticker: company stock ticker

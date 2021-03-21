@@ -13,12 +13,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DetailsScreenArguments {
-  final String title;
   final String period;
   final List<Stock> stocks;
   final DateTime startDate;
 
-  DetailsScreenArguments(this.title, this.period, this.stocks, this.startDate);
+  DetailsScreenArguments(this.period, this.stocks, this.startDate);
 }
 
 class DetailsScreenRoute extends StatelessWidget {
@@ -30,7 +29,6 @@ class DetailsScreenRoute extends StatelessWidget {
         ModalRoute.of(context).settings.arguments;
 
     return DetailsScreen(
-      title: args.title,
       stocks: args.stocks,
       period: args.period,
       startDate: args.startDate,
@@ -39,7 +37,6 @@ class DetailsScreenRoute extends StatelessWidget {
 }
 
 class DetailsScreen extends StatefulWidget {
-  final String title;
   final List<Stock> stocks;
   final String period;
   final DateTime startDate;
@@ -51,7 +48,7 @@ class DetailsScreen extends StatefulWidget {
     GraphType(name: 'MACDAVG', defaultSelected: false, formulae: MACDAVG()),
   ];
 
-  DetailsScreen({Key key, this.title, this.stocks, this.period, this.startDate})
+  DetailsScreen({Key key, this.stocks, this.period, this.startDate})
       : super(key: key);
 
   @override
@@ -60,6 +57,12 @@ class DetailsScreen extends StatefulWidget {
 
 class DetailsScreenState extends AppBaseState<DetailsScreen> {
   Map<String, bool> selectedGraphTypes = {};
+  static final String _alertTitle = 'Error';
+  static final String _tooManyIndicators =
+      'You may have only two indicators visible at the same time.';
+  static final String _tooFewIndicators =
+      'You must have at least one indicator visible in the chart.';
+  static final String _detailsTitle = 'Stock Details';
 
   @override
   void initState() {
@@ -73,11 +76,9 @@ class DetailsScreenState extends AppBaseState<DetailsScreen> {
         .where((type) => selectedGraphTypes[type])
         .toList();
     if (selected.length == 2 && !selected.contains(type)) {
-      showAlertDialog(context, 'Error',
-          'You may have only two indicators visible at the same time');
+      showAlertDialog(context, _alertTitle, _tooManyIndicators);
     } else if (selected.length == 1 && selected.contains(type)) {
-      showAlertDialog(context, 'Error',
-          'You must have at least one indicator visible in the chart');
+      showAlertDialog(context, _alertTitle, _tooFewIndicators);
     } else {
       setState(() {
         selectedGraphTypes[type] = !selectedGraphTypes[type];
@@ -111,7 +112,7 @@ class DetailsScreenState extends AppBaseState<DetailsScreen> {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: Text(widget.title),
+          title: Text(_detailsTitle),
           centerTitle: true,
           actions: <Widget>[
             PopupMenuButton<String>(

@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 class TickerManager {
   static final TickerManager _instance = TickerManager._init();
 
+  static final String _tickersLocation = 'assets/tickers.csv';
+
   TickerManager._init();
 
   factory TickerManager() {
@@ -25,8 +27,7 @@ class TickerManager {
   }
 
   Future<List<String>> get tickers async {
-    final String _tickerString =
-        await rootBundle.loadString('assets/tickers.csv');
+    final String _tickerString = await rootBundle.loadString(_tickersLocation);
     final List<List<dynamic>> _csvData =
         CsvToListConverter().convert(_tickerString);
     return _flattenTickers(_csvData);

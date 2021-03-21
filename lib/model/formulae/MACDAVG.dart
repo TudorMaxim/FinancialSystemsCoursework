@@ -10,8 +10,7 @@ class MACDAVG implements Formulae {
   @override
   List<Point> compute(List<Stock> stocks, int period, int startIndex) {
     if (stocks.length < period) {
-      throw new ErrorDescription(
-          "Period must be smalled than the number of stocks");
+      throw new ErrorDescription(Formulae.periodError);
     }
 
     if (stocks.isEmpty) return [];
