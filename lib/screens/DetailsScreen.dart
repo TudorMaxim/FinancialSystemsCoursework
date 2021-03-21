@@ -25,7 +25,8 @@ class DetailsScreen extends StatefulWidget {
     GraphType(name: 'MACDAVG', defaultSelected: false, formulae: MACDAVG()),
   ];
 
-  DetailsScreen({Key key, this.title, this.stocks, this.period, this.startDate}) : super(key: key);
+  DetailsScreen({Key key, this.title, this.stocks, this.period, this.startDate})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() => DetailsScreenState();
@@ -38,8 +39,7 @@ class DetailsScreenState extends AppBaseState<DetailsScreen> {
   void initState() {
     super.initState();
     widget.graphTypes.forEach(
-        (type) => (selectedGraphTypes[type.name] = type.defaultSelected)
-    );
+        (type) => (selectedGraphTypes[type.name] = type.defaultSelected));
   }
 
   void handleSelectedChoices(String type) {
@@ -64,10 +64,16 @@ class DetailsScreenState extends AppBaseState<DetailsScreen> {
     bool partialIndex = false;
 
     for (int i = 0; i <= widget.stocks.length - 1; i++) {
-      if (DateTime.fromMillisecondsSinceEpoch(widget.stocks[i].timestamp).toString().substring(0, 10) == widget.startDate.toString().substring(0, 10)) {
+      if (DateTime.fromMillisecondsSinceEpoch(widget.stocks[i].timestamp)
+              .toString()
+              .substring(0, 10) ==
+          widget.startDate.toString().substring(0, 10)) {
         startIndex = i;
-      } else if (DateTime.fromMillisecondsSinceEpoch(widget.stocks[i].timestamp).toString().substring(0, 7) == widget.startDate.toString().substring(0, 7)
-          && !partialIndex) {
+      } else if (DateTime.fromMillisecondsSinceEpoch(widget.stocks[i].timestamp)
+                  .toString()
+                  .substring(0, 7) ==
+              widget.startDate.toString().substring(0, 7) &&
+          !partialIndex) {
         startIndex = i;
         partialIndex = true;
       }
@@ -115,27 +121,28 @@ class DetailsScreenState extends AppBaseState<DetailsScreen> {
       );
 
   Widget body() => Center(
-      child: Container(
+          child: Container(
         padding: EdgeInsets.all(10),
         child: StockChart(
-          symbol: widget.stocks.first.symbol,
+          ticker: widget.stocks.first.ticker,
           seriesList: this._getSeriesList(),
           animate: true,
         ),
       ));
 
-  List<charts.Series<Point, DateTime>> _getSeriesList() =>
-    this.selectedGraphTypes.entries
+  List<charts.Series<Point, DateTime>> _getSeriesList() => this
+      .selectedGraphTypes
+      .entries
       .where((entry) => entry.value)
       .map((entry) => StockChart.generateSeries(
-        entry.key,
-        this._mapStocksToPoints(entry.key)
-      ))
+          entry.key, this._mapStocksToPoints(entry.key)))
       .toList();
 
-  List<Point> _mapStocksToPoints(String name) =>
-    widget.graphTypes
+  List<Point> _mapStocksToPoints(String name) => widget.graphTypes
       .firstWhere((graphType) => graphType.name == name)
       .formulae
-      .compute(widget.stocks, int.parse(widget.period.substring(0, widget.period.length - 1)), computeStartingIndex());
+      .compute(
+          widget.stocks,
+          int.parse(widget.period.substring(0, widget.period.length - 1)),
+          computeStartingIndex());
 }

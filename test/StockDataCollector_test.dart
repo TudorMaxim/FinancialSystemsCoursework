@@ -6,11 +6,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:financial_systems_coursework/repository/StockDataCollector.dart';
 
 void main() {
-
   /// Test createURL
-  test("Craft URL correctly", (){
-    String expected = "https://query1.finance.yahoo.com/v8/finance/chart/AAPL?symbol=AAPL&period1=1612437713&period2=1614856913&interval=1d";
-    String actual = new StockDataCollector().createURL("AAPL", "1612437713", "1614856913");
+  test("Craft URL correctly", () {
+    String expected =
+        "https://query1.finance.yahoo.com/v8/finance/chart/AAPL?symbol=AAPL&period1=1612437713&period2=1614856913&interval=1d";
+    String actual =
+        new StockDataCollector().createURL("AAPL", "1612437713", "1614856913");
 
     expect(actual, expected);
   });
@@ -32,17 +33,20 @@ void main() {
     List<Stock> actualStocks = Stock.jsonToStocks("AAPL", jsonDecode(actual));
 
     /// Craft expected
-    String expected = await new StockDataCollector().getPricesAsJSON("AAPL", "1612437713", "1614856913");
-    List<Stock> expectedStocks = Stock.jsonToStocks("AAPL", jsonDecode(expected));
+    String expected = await new StockDataCollector()
+        .getPricesAsJSON("AAPL", "1612437713", "1614856913");
+    List<Stock> expectedStocks =
+        Stock.jsonToStocks("AAPL", jsonDecode(expected));
 
     /// Check that stock lists have the same sizes
     expect(actualStocks.length, expectedStocks.length);
 
     /// Check for equality
-    for (int i = 0 ; i < actualStocks.length ; ++i) {
-      expect(actualStocks[i].symbol, expectedStocks[i].symbol);
+    for (int i = 0; i < actualStocks.length; ++i) {
+      expect(actualStocks[i].ticker, expectedStocks[i].ticker);
       expect(actualStocks[i].timestamp, expectedStocks[i].timestamp);
-      expect(actualStocks[i].currentMarketPrice, expectedStocks[i].currentMarketPrice);
+      expect(actualStocks[i].currentMarketPrice,
+          expectedStocks[i].currentMarketPrice);
     }
   });
 }
