@@ -12,6 +12,9 @@ class StockDataProvider {
     return _instance;
   }
 
+  /// Try to get timeseries data from the DB cache.
+  /// If this fails, get fresh data from Yahoo! Finance and
+  /// update the cache.
   Future<List<Stock>> getPrices(String ticker, int from, int to) async {
     List<Stock> _fromDB = await DBManager().getFromDBOrNull(ticker, from, to);
     if (_fromDB == null) {

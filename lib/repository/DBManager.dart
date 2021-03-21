@@ -4,6 +4,9 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:financial_systems_coursework/model/Stock.dart';
 
+/// This objects gets stored in the Database.
+/// Each StockDBEntry holds a record for a series of datapoints
+/// for a certain ticker
 class StockDBEntry {
   int id;
   String ticker;
@@ -54,6 +57,7 @@ class DBManager {
             jsonValues TEXT
           )''';
   static final _stocksTable = 'STOCKS';
+  static final int _oneDay = 86400000;
 
   static final DBManager _instance = DBManager._init();
   Future<Database> _db;
@@ -87,6 +91,8 @@ class DBManager {
     return _db;
   }
 
+  /// Check if there's a cache entry for a certain ticker
+  /// between two timestamps
   Future<bool> isCached(String ticker, int from, int to) async {
     StockDBEntry _entry = await _getByTicker(ticker);
     return _entry != null &&
@@ -107,8 +113,10 @@ class DBManager {
     });
   }
 
+  /// Get a List of Stocks representing a timeseries of Stock data points
+  /// Warning! This method makes no assumptions! It should only be called
+  /// if you are sure that the cached values exist in the DB!
   Future<List<Stock>> _unsafeGetFromDB(String ticker, int from, int to) async {
-    int _oneDay = 86400000;
     StockDBEntry _entry = await _getByTicker(ticker);
     List<Stock> _stocks = Stock.jsonToStocks(ticker, jsonDecode(_entry.values));
     List<Stock> res = _stocks
@@ -131,6 +139,11 @@ class DBManager {
     }
   }
 
+  /// Delete old cache entries for this ticker, if they exist,
+  /// and update the cache with new entries.
+  /// 'values' is expected to be a JSON-like object encoded as
+  /// a string, representing the body of the request returned
+  /// by a call to Yahoo! Finance.
   Future<void> refreshCache(
       String ticker, int from, int to, String values) async {
     Database db = await _db;
@@ -154,6 +167,7 @@ class DBManager {
   }
 }
 
+/// Helper main used for testing the db. Shouldn't be used.
 void main() async {
   Database db = await DBManager().db;
   List<Map<String, dynamic>> maps = await db.transaction((txn) async {

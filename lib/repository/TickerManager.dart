@@ -16,6 +16,9 @@ class TickerManager {
     return t.replaceAll(',', '').trim();
   }
 
+  /// The csv library might read the tickers.csv file
+  /// in two different formats. Identify the right format
+  /// and flatten the input list accordingly.
   List<String> _flattenTickers(List<List<dynamic>> tickers) {
     // tickers is of the form [[A, ','], [B, ','], [C, ','] ...]
     if (tickers.first.length == 2) {
