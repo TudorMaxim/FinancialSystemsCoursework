@@ -25,11 +25,9 @@ class Stock {
     return '$ticker at $currentMarketPrice on $timestamp';
   }
 
-  /**
-   * Create stock objects from collected data.
-   *
-   * Take closing price of each day.
-   */
+  /// Create stock objects from collected data.
+  ///
+  /// Take closing price of each day.
   static List<Stock> jsonToStocks(
       String ticker, Map<String, dynamic> jsonObject) {
     List<int> timestamps = (jsonObject['chart']['result'][0]['timestamp']

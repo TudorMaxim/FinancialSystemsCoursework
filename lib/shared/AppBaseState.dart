@@ -6,8 +6,6 @@ class IAppState {
   var connectivityListener;
   bool connected = false;
   bool isFetching = false;
-
-  // TODO: Add any other state-related fields.
 }
 
 class AppBaseState<T extends StatefulWidget> extends State<T> with IAppState {
