@@ -12,6 +12,32 @@ import 'package:financial_systems_coursework/model/Stock.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+class DetailsScreenArguments {
+  final String title;
+  final String period;
+  final List<Stock> stocks;
+  final DateTime startDate;
+
+  DetailsScreenArguments(this.title, this.period, this.stocks, this.startDate);
+}
+
+class DetailsScreenRoute extends StatelessWidget {
+  static final routeName = '/details';
+
+  @override
+  Widget build(BuildContext context) {
+    final DetailsScreenArguments args =
+        ModalRoute.of(context).settings.arguments;
+
+    return DetailsScreen(
+      title: args.title,
+      stocks: args.stocks,
+      period: args.period,
+      startDate: args.startDate,
+    );
+  }
+}
+
 class DetailsScreen extends StatefulWidget {
   final String title;
   final List<Stock> stocks;

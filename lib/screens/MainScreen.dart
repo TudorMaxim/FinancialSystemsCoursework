@@ -10,15 +10,16 @@ import 'package:financial_systems_coursework/widgets/SelectForm.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class MainScreen extends StatefulWidget {
+class MainScreenRoute extends StatefulWidget {
+  static final routeName = '/';
   final String title;
-  MainScreen({Key key, this.title}) : super(key: key);
+  MainScreenRoute({Key key, this.title}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => MainScreenState();
+  State<StatefulWidget> createState() => MainScreenRouteState();
 }
 
-class MainScreenState extends AppBaseState<MainScreen> {
+class MainScreenRouteState extends AppBaseState<MainScreenRoute> {
   String _ticker;
   String _period;
   List<DateTime> _dates;
@@ -61,14 +62,9 @@ class MainScreenState extends AppBaseState<MainScreen> {
           .getPrices(_ticker.trim(), _startStamp, _endStamp);
       debugPrint('Found ${_stocks.length} stocks.');
       if (_stocks != null && _stocks.length != 0) {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-              builder: (context) => DetailsScreen(
-                  title: 'Stock Details',
-                  stocks: _stocks,
-                  period: _period,
-                  startDate: _startMidnight)),
-        );
+        Navigator.of(context).pushNamed('/details',
+            arguments: DetailsScreenArguments(
+                'Stock Details', _period, _stocks, _startMidnight));
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('No data points in your selected date range!'),

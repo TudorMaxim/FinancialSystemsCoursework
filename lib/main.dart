@@ -1,3 +1,4 @@
+import 'package:financial_systems_coursework/screens/DetailsScreen.dart';
 import 'package:financial_systems_coursework/screens/MainScreen.dart';
 import 'package:flutter/material.dart';
 
@@ -11,9 +12,13 @@ class StocksApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MainScreen(
-        title: 'Select Stock',
-      ),
+      initialRoute: '/',
+      routes: {
+        MainScreenRoute.routeName: (context) => MainScreenRoute(
+              title: 'Select Stock',
+            ),
+        DetailsScreenRoute.routeName: (context) => DetailsScreenRoute(),
+      },
     );
   }
 }
