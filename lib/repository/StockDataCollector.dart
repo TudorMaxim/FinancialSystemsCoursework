@@ -29,7 +29,7 @@ class StockDataCollector {
   /// Data sampled once a day, closing price
   ///
   /// Example of function call:
-  ///    StockDataCollector.getPrices("AAPL", "1612437713", "1614856913");
+  ///    StockDataCollector.getPrices('AAPL', '1612437713', '1614856913');
   /// Corresponding URL:
   ///    https://query1.finance.yahoo.com/v8/finance/chart/AAPL?symbol=AAPL&period1=1612437713&period2=1614856913&interval=1d
   Future<String> getPricesAsJSON(

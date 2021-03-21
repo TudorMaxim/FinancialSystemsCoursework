@@ -9,6 +9,8 @@ class IAppState {
 }
 
 class AppBaseState<T extends StatefulWidget> extends State<T> with IAppState {
+  static final String _close = 'Close';
+
   @override
   void initState() {
     super.initState();
@@ -67,7 +69,7 @@ class AppBaseState<T extends StatefulWidget> extends State<T> with IAppState {
           content: new Text(message),
           actions: <Widget>[
             new TextButton(
-              child: new Text("Close"),
+              child: new Text(_close),
               onPressed: () {
                 Navigator.of(context).pop();
               },

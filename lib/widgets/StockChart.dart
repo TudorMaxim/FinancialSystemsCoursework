@@ -56,7 +56,7 @@ class StockChartState extends State<StockChart> {
             tickProviderSpec:
                 charts.BasicNumericTickProviderSpec(zeroBound: false),
             tickFormatterSpec:
-                charts.BasicNumericTickFormatterSpec((value) => "\$$value"),
+                charts.BasicNumericTickFormatterSpec((value) => '\$$value'),
           ),
           behaviors: [
             charts.PanAndZoomBehavior(),
