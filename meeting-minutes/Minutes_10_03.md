@@ -3,7 +3,7 @@
 ## Date:
 ## Attendees:
 - Moisi Teofana ✔
-- Balamurai, Thishaan ✔
+- Balamurali, Thishaan ✔
 - Maxim Tudor ✔
 - Pavel Simon Horia Tudor ✔
 - Anton Luca-Dorin ✔
@@ -18,7 +18,7 @@
 
 ## Action Points for next week
 - Moisi Teofana ➡ Data modeling refactoring using Strategy design pattern, implementation of MACD
-- Balamurai, Thishaan ➡ Implementation of PlotPrice, SMA & EMA
+- Balamurali, Thishaan ➡ Implementation of PlotPrice, SMA & EMA
 - Maxim Tudor ➡ Finish Graph Screen
 - Pavel Simon Horia Tudor ➡ Fetch data refactoring using Singleton, implementation of MACDAVG
 - Anton Luca-Dorin ➡ Data persistence

@@ -2,8 +2,8 @@
 
 ## Date: 17/03/2021
 ## Attendees:
-- Moisi Teofoana ✔
-- Balamurai, Thishaan ✔
+- Moisi Teofana ✔
+- Balamurali, Thishaan ✔
 - Maxim Tudor ✔
 - Pavel Simon Horia Tudor ✔
 - Anton Luca-Dorin ✔
@@ -17,8 +17,8 @@
 - Formulas
 
 ## Action Points for next week
-- Moisi Teofoana ➡ Class Diagram, Sequence Diagram , Final report and Unit test on formulas 
-- Balamurai, Thishaan ➡ Use Case Diagram 
+- Moisi Teofana ➡ Class Diagram, Sequence Diagram , Final report and Unit test on formulas 
+- Balamurali, Thishaan ➡ Use Case Diagram 
 - Maxim Tudor ➡ Architecture Diagram 
 - Pavel Simon Horia Tudor ➡ Architecture Diagram , Final report 
 - Anton Luca-Dorin ➡ Unit test for DBManager, SymbolManager, StockProvider 
