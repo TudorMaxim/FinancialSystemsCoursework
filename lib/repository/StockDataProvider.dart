@@ -12,13 +12,14 @@ class StockDataProvider {
     return _instance;
   }
 
-  Future<List<Stock>> getPrices(
-      String ticker, int from, int to) async {
-    List<Stock> _fromDB =
-        await DBManager().getFromDBOrNull(ticker, from, to);
+  /// Try to get timeseries data from the DB cache.
+  /// If this fails, get fresh data from Yahoo! Finance and
+  /// update the cache.
+  Future<List<Stock>> getPrices(String ticker, int from, int to) async {
+    List<Stock> _fromDB = await DBManager().getFromDBOrNull(ticker, from, to);
     if (_fromDB == null) {
-      String stocksJSON = await StockDataCollector().getPricesAsJSON(
-          ticker, from.toString(), to.toString());
+      String stocksJSON = await StockDataCollector()
+          .getPricesAsJSON(ticker, from.toString(), to.toString());
       await DBManager().refreshCache(ticker, from, to, stocksJSON);
       return Stock.jsonToStocks(ticker, jsonDecode(stocksJSON));
     } else {

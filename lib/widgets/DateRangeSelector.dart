@@ -1,8 +1,9 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+
+import 'package:financial_systems_coursework/widgets/InlineBold.dart';
 
 class DateRangeSelector extends StatefulWidget {
   final Function _handleDateSubmit;
@@ -16,6 +17,15 @@ class DateRangeSelector extends StatefulWidget {
 }
 
 class _DateRangeSelectorState extends State<DateRangeSelector> {
+  static final String _pickerTitle = 'Pick Date Range';
+  static final String _ok = 'OK';
+  static final String _cancel = 'CANCEL';
+  static final String _start = 'Start: ';
+  static final String _end = 'End: ';
+  static final String _daysSelected = 'Days Selcted: ';
+  static final String _selectErrorMessage =
+      'Please select a valid date range!\n(less then two years)';
+
   final Function _handleDateSubmit;
   List<DateTime> _dates;
   bool _err = false;
@@ -35,8 +45,8 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
     Navigator.of(context).pop();
     if (_dates != null && _dates.first != null && _dates.last != null) {
       if (_dates.last
-          .difference(_dates.first)
-          .compareTo(Duration(days: 365 * 2)) ==
+              .difference(_dates.first)
+              .compareTo(Duration(days: 365 * 2)) ==
           1) {
         debugPrint('Range larger than 2 years selected!');
         this.setState(() {
@@ -63,7 +73,7 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('Pick date range'),
+            title: Text(_pickerTitle),
             content: Container(
               width: MediaQuery.of(context).size.width - 10,
               height: MediaQuery.of(context).size.height / 2,
@@ -73,16 +83,16 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
                 minDate: DateTime.now().subtract(Duration(days: 365 * 5)),
                 maxDate: DateTime.now(),
                 initialSelectedRange:
-                PickerDateRange(_dates.first, _dates.last),
+                    PickerDateRange(_dates.first, _dates.last),
               ),
             ),
             actions: [
               TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: Text('CANCEL')),
+                  child: Text(_cancel)),
               TextButton(
                   onPressed: () => _handleDateAlertSubmit(context),
-                  child: Text('OK'))
+                  child: Text(_ok))
             ],
             elevation: 24.0,
           );
@@ -97,42 +107,28 @@ class _DateRangeSelectorState extends State<DateRangeSelector> {
         children: [
           ElevatedButton(
             onPressed: () => _onShowDialog(context),
-            child: Text('Pick Date Range'),
-          ),
-          VerticalDivider(
-            width: 12.0,
+            child: Text(_pickerTitle),
           ),
           Padding(
             padding:
-            const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
-            child: Text('Start: ${DateFormat.yMd().format(_dates.first)}'),
-          ),
-          VerticalDivider(
-            width: 12.0,
+                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0),
+            child: InlineBold(_start, DateFormat.yMd().format(_dates.first)),
           ),
           Padding(
             padding:
-            const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
-            child: Text('End: ${DateFormat.yMd().format(_dates.last)}'),
-          ),
-          VerticalDivider(
-            width: 12.0,
+                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0),
+            child: InlineBold(_end, DateFormat.yMd().format(_dates.last)),
           ),
           Padding(
             padding:
-            const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
-            child: Text('$_durr days currently selected'),
-          ),
-          VerticalDivider(
-            width: 12.0,
+                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+            child: InlineBold(_daysSelected, '$_durr'),
           ),
           Padding(
             padding:
-            const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+                const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
             child: Text(
-              _err
-                  ? 'Please select a valid date range!\n(less then two years)'
-                  : '',
+              _err ? _selectErrorMessage : '',
               style: TextStyle(color: Colors.red),
             ),
           )
