@@ -4,6 +4,9 @@ import 'package:http/http.dart' as http;
 class StockDataCollector {
   static final StockDataCollector _instance = StockDataCollector._internal();
 
+  @visibleForTesting
+  static http.Client client = new http.Client();
+
   static final _authority = 'query1.finance.yahoo.com';
   static final _unencodedPath = '/v8/finance/chart/';
   factory StockDataCollector() {
@@ -34,7 +37,7 @@ class StockDataCollector {
   ///    https://query1.finance.yahoo.com/v8/finance/chart/AAPL?symbol=AAPL&period1=1612437713&period2=1614856913&interval=1d
   Future<String> getPricesAsJSON(
       String ticker, String startDate, String endDate) async {
-    final response = await http.get(
+    final response = await client.get(
       createURL(ticker, startDate, endDate),
       headers: <String, String>{
         'Content-Type': 'application/json',

@@ -1,9 +1,14 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:financial_systems_coursework/model/Stock.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:financial_systems_coursework/repository/StockDataCollector.dart';
+
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
 
 void main() {
   /// Test createURL
@@ -19,18 +24,15 @@ void main() {
 
   /// Test getPricesAsJSON
   test("Check JSON response from web", () async {
-    final response = await http.get(
-      new StockDataCollector().createURL("AAPL", "1612437713", "1614856913"),
-      headers: <String, String>{
-        'Content-Type': 'application/json',
-      },
-    );
+    http.Response expectedResponse = new http.Response(File("test/resources/AAPL_test_response.json").readAsStringSync(), 200);
 
-    /// Expect 200 OK result
-    expect(response.statusCode, 200);
+    debugPrint(expectedResponse.body);
+
+
+    when(StockDataCollector.client.get(any)).thenAnswer((_) async => expectedResponse);
 
     /// Get actual data from StockDataCollector
-    String actual = response.body;
+    String actual = expectedResponse.body;
     List<Stock> actualStocks = Stock.jsonToStocks("AAPL", jsonDecode(actual));
 
     /// Craft expected
@@ -49,5 +51,7 @@ void main() {
       expect(actualStocks[i].currentMarketPrice,
           expectedStocks[i].currentMarketPrice);
     }
+
+
   });
 }
