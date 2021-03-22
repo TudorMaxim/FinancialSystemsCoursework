@@ -94,15 +94,15 @@ void main() {
   });
 
   test("SMA test with period = 12d", () async {
-    List<Point> actualSMAValues = sma.compute(stocks, 12, 104);
+    List<Point> actualSMAValues = sma.compute(stocks, 12, 37);
 
 
     // expected SMA values for 12d period have been taken from here: https://www.bullkhan.com/nasdaq/stock/MSFT
     List<Point> expectedSMAValuesFor12P = [
-      new Point(232.53, 1615815000000),
-      new Point(232.97, 1615901400000),
-      new Point(232.98, 1615987800000),
-      new Point(232.72, 1616074200000),
+      new Point(232.53, 1609425000000),
+      new Point(232.97, 1609770600000),
+      new Point(232.98, 1609857000000),
+      new Point(232.72, 1609943400000),
     ];
 
 
@@ -117,7 +117,7 @@ void main() {
   });
 
   test("SMA test with period = 35d", () async {
-    List<Point> actualSMAValues = sma.compute(stocks, 35, 65);
+    List<Point> actualSMAValues = sma.compute(stocks, 35, 54);
 
 
     // expected SMA values for 35d period have been taken from here: https://www.bullkhan.com/nasdaq/stock/MSFT
@@ -126,36 +126,6 @@ void main() {
       new Point(236.95, 1609770600000),
       new Point(237.08, 1609857000000),
       new Point(237.02, 1609943400000),
-    ];
-
-
-    for (int i = 0 ; i < expectedSMAValuesFor35P.length ; ++i) {
-      /// Round actual values to 2 decimal places doubles (for comparison)
-      int expectedSMAIndex = actualSMAValues.length - expectedSMAValuesFor35P.length + i;
-      double roundedPointValue = double.parse(actualSMAValues[expectedSMAIndex].value.toStringAsFixed(2));
-
-      expect(roundedPointValue, expectedSMAValuesFor35P[i].value);
-      expect(actualSMAValues[i].timestamp, expectedSMAValuesFor35P[i].timestamp);
-    }
-  });
-
-  test("SMA test with period = 100d", () async {
-
-    String stocksJSON = await StockDataCollector().getPricesAsJSON(
-        "MSFT", "1606806767", "1614556800");
-
-    /// Get list of stocks to compute SMA
-    List<Stock> stocks100d = Stock.jsonToStocks("MSFT", jsonDecode(stocksJSON));
-
-    List<Point> actualSMAValues = sma.compute(stocks100d, 100, 100);
-
-
-    // expected SMA values for 35d period have been taken from here: https://www.bullkhan.com/nasdaq/stock/MSFT
-    List<Point> expectedSMAValuesFor35P = [
-      new Point(223.09, 1606833000000),
-      new Point(223.32, 1606919400000),
-      new Point(223.54, 1607005800000),
-      new Point(223.7, 1607092200000),
     ];
 
 
