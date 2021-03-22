@@ -7,7 +7,7 @@ class SMA implements Formulae {
   @override
   List<Point> compute(List<Stock> stocks, int period, int startIndex) {
     if (stocks.length < period) {
-      throw new ErrorDescription("Period must be smalled than the number of stocks");
+      throw new ErrorDescription("Period must be smaller than the number of stocks");
     }
 
     List<Point> indicators = new List.filled(stocks.length, Point(stocks.first.currentMarketPrice, stocks.first.timestamp), growable: true);

@@ -13,7 +13,7 @@ void main() {
 
   setUp(() async {
     String stocksJSON = await StockDataCollector().getPricesAsJSON(
-        "MSFT", "1609459200", "1614556800");
+        "MSFT", "1569853800", "1616429153");
 
     /// Get list of stocks to compute SMA
     stocks = Stock.jsonToStocks("MSFT", jsonDecode(stocksJSON));
@@ -22,7 +22,7 @@ void main() {
   });
 
   test("SMA test", () async {
-    List<Point> actualSMAValues = sma.compute(stocks, 50, 65);
+    List<Point> actualSMAValues = sma.compute(stocks, 50, 318);
 
     List<Point> expectedSMAValuesFor50P = [
       new Point(215.14, 1609425000000),
@@ -52,7 +52,7 @@ void main() {
       new Point(221.52,1612535400000),
       new Point(222.09,1612794600000),
       new Point(222.69,1612881000000),
-      new Point(222.24,1612967400000),
+      new Point(223.24,1612967400000),
       new Point(223.85,1613053800000),
       new Point(224.43,1613140200000),
       new Point(224.99,1613485800000),
@@ -77,7 +77,8 @@ void main() {
       new Point(231.18,1615815000000),
       new Point(231.49,1615901400000),
       new Point(231.88,1615987800000),
-      new Point(232.13,1616074200000)
+      new Point(232.13,1616074200000),
+      new Point(232.50,1616160600000)
     ];
 
     /// Expect actual points have same length as expected points
@@ -94,10 +95,10 @@ void main() {
   });
 
   test("SMA test with period = 12d", () async {
-    List<Point> actualSMAValues = sma.compute(stocks, 12, 37);
+    List<Point> actualSMAValues = sma.compute(stocks, 12, 318);
 
 
-    // expected SMA values for 12d period have been taken from here: https://www.bullkhan.com/nasdaq/stock/MSFT
+    /// expected SMA values for 12d period have been taken from here: https://www.bullkhan.com/nasdaq/stock/MSFT
     List<Point> expectedSMAValuesFor12P = [
       new Point(232.53, 1609425000000),
       new Point(232.97, 1609770600000),
@@ -108,7 +109,7 @@ void main() {
 
     for (int i = 0 ; i < expectedSMAValuesFor12P.length ; ++i) {
       /// Round actual values to 2 decimal places doubles (for comparison)
-      int expectedSMAIndex = actualSMAValues.length - expectedSMAValuesFor12P.length + i;
+      int expectedSMAIndex = actualSMAValues.length - expectedSMAValuesFor12P.length + i - 1;
       double roundedPointValue = double.parse(actualSMAValues[expectedSMAIndex].value.toStringAsFixed(2));
 
       expect(roundedPointValue, expectedSMAValuesFor12P[i].value);
@@ -117,10 +118,10 @@ void main() {
   });
 
   test("SMA test with period = 35d", () async {
-    List<Point> actualSMAValues = sma.compute(stocks, 35, 54);
+    List<Point> actualSMAValues = sma.compute(stocks, 35, 318);
 
 
-    // expected SMA values for 35d period have been taken from here: https://www.bullkhan.com/nasdaq/stock/MSFT
+    /// expected SMA values for 35d period have been taken from here: https://www.bullkhan.com/nasdaq/stock/MSFT
     List<Point> expectedSMAValuesFor35P = [
       new Point(236.71, 1609425000000),
       new Point(236.95, 1609770600000),
@@ -131,7 +132,7 @@ void main() {
 
     for (int i = 0 ; i < expectedSMAValuesFor35P.length ; ++i) {
       /// Round actual values to 2 decimal places doubles (for comparison)
-      int expectedSMAIndex = actualSMAValues.length - expectedSMAValuesFor35P.length + i;
+      int expectedSMAIndex = actualSMAValues.length - expectedSMAValuesFor35P.length + i - 1;
       double roundedPointValue = double.parse(actualSMAValues[expectedSMAIndex].value.toStringAsFixed(2));
 
       expect(roundedPointValue, expectedSMAValuesFor35P[i].value);
