@@ -5,7 +5,7 @@ class StockDataCollector {
   static final StockDataCollector _instance = StockDataCollector._internal();
 
   @visibleForTesting
-  static http.Client client = new http.Client();
+  http.Client _client = http.Client();
 
   static final _authority = 'query1.finance.yahoo.com';
   static final _unencodedPath = '/v8/finance/chart/';
@@ -14,6 +14,11 @@ class StockDataCollector {
   }
 
   StockDataCollector._internal();
+
+  @visibleForTesting
+  set httpClientForTesting(http.Client newClient) {
+    _client = newClient;
+  }
 
   @visibleForTesting
   Uri createURL(String ticker, String startDate, String endDate) {
@@ -37,7 +42,7 @@ class StockDataCollector {
   ///    https://query1.finance.yahoo.com/v8/finance/chart/AAPL?symbol=AAPL&period1=1612437713&period2=1614856913&interval=1d
   Future<String> getPricesAsJSON(
       String ticker, String startDate, String endDate) async {
-    final response = await client.get(
+    final response = await _client.get(
       createURL(ticker, startDate, endDate),
       headers: <String, String>{
         'Content-Type': 'application/json',

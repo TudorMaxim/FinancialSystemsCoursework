@@ -1,57 +1,40 @@
-import 'dart:convert';
 import 'dart:io';
 
-import 'package:financial_systems_coursework/model/Stock.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter_test/flutter_test.dart';
 import 'package:financial_systems_coursework/repository/StockDataCollector.dart';
-
+import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
+import 'StockDataCollector_test.mocks.dart';
+
+
+@GenerateMocks([http.Client])
 void main() {
   /// Test createURL
-  test("Craft URL correctly", () {
+  test('Craft URL correctly', () {
     String expected =
-        "https://query1.finance.yahoo.com/v8/finance/chart/AAPL?symbol=AAPL&period1=1612437713&period2=1614856913&interval=1d";
+        'https://query1.finance.yahoo.com/v8/finance/chart/AAPL?symbol=AAPL&period1=1612437713&period2=1614856913&interval=1d';
     String actual = new StockDataCollector()
-        .createURL("AAPL", "1612437713", "1614856913")
+        .createURL('AAPL', '1612437713', '1614856913')
         .toString();
 
     expect(actual, expected);
   });
 
   /// Test getPricesAsJSON
-  test("Check JSON response from web", () async {
-    http.Response expectedResponse = new http.Response(File("test/resources/AAPL_test_response.json").readAsStringSync(), 200);
+  test('Check JSON response from web', () async {
+    http.Response expectedResponse = http.Response(
+        File('test/resources/AAPL_test_response.json').readAsStringSync(), 200);
 
-    debugPrint(expectedResponse.body);
-
-
-    when(StockDataCollector.client.get(any)).thenAnswer((_) async => expectedResponse);
-
-    /// Get actual data from StockDataCollector
-    String actual = expectedResponse.body;
-    List<Stock> actualStocks = Stock.jsonToStocks("AAPL", jsonDecode(actual));
+    final mockClient = MockClient();
+    when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer((_) async => expectedResponse);
+    StockDataCollector().httpClientForTesting = mockClient;
 
     /// Craft expected
-    String expected = await new StockDataCollector()
-        .getPricesAsJSON("AAPL", "1612437713", "1614856913");
-    List<Stock> expectedStocks =
-        Stock.jsonToStocks("AAPL", jsonDecode(expected));
+    String actual = await StockDataCollector()
+        .getPricesAsJSON('AAPL', '1612437713', '1614856913');
 
-    /// Check that stock lists have the same sizes
-    expect(actualStocks.length, expectedStocks.length);
-
-    /// Check for equality
-    for (int i = 0; i < actualStocks.length; ++i) {
-      expect(actualStocks[i].ticker, expectedStocks[i].ticker);
-      expect(actualStocks[i].timestamp, expectedStocks[i].timestamp);
-      expect(actualStocks[i].currentMarketPrice,
-          expectedStocks[i].currentMarketPrice);
-    }
-
-
+    expect(actual, expectedResponse.body);
   });
 }
