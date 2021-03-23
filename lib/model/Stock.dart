@@ -1,19 +1,19 @@
 class Stock {
-  String symbol;
+  String ticker;
   int timestamp;
   double currentMarketPrice;
 
-  Stock({this.symbol, this.timestamp, this.currentMarketPrice});
+  Stock({this.ticker, this.timestamp, this.currentMarketPrice});
 
   Stock.fromMap(Map<String, dynamic> map) {
-    this.symbol = map['symbol'];
+    this.ticker = map['ticker'];
     this.timestamp = map['timestamp'];
     this.currentMarketPrice = map['currentMarketPrice'];
   }
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> map = {
-      'symbol': this.symbol,
+      'ticker': this.ticker,
       'timestamp': this.timestamp,
       'currentMarketPrice': this.currentMarketPrice
     };
@@ -22,16 +22,14 @@ class Stock {
 
   @override
   String toString() {
-    return '$symbol at $currentMarketPrice on $timestamp';
+    return '$ticker at $currentMarketPrice on $timestamp';
   }
 
-  /**
-   * Create stock objects from collected data.
-   *
-   * Take closing price of each day.
-   */
+  /// Create stock objects from collected data.
+  ///
+  /// Take closing price of each day.
   static List<Stock> jsonToStocks(
-      String symbol, Map<String, dynamic> jsonObject) {
+      String ticker, Map<String, dynamic> jsonObject) {
     List<int> timestamps = (jsonObject['chart']['result'][0]['timestamp']
             as List)
         .cast<int>()
@@ -48,7 +46,7 @@ class Stock {
     for (int i = 0; i < timestamps.length; ++i) {
       if (prices[i] != null) {
         stockList.add(Stock(
-            symbol: symbol,
+            ticker: ticker,
             timestamp: timestamps[i],
             currentMarketPrice: prices[i]));
       }

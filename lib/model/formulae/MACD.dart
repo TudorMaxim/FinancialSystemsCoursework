@@ -8,18 +8,20 @@ class MACD implements Formulae {
   @override
   List<Point> compute(List<Stock> stocks, int period, int startIndex) {
     if (stocks.length < period) {
-      throw new ErrorDescription("Period must be smalled than the number of stocks");
+      throw new ErrorDescription(Formulae.periodError);
     }
 
     if (stocks.isEmpty) return [];
 
-    List<Point> indicators = [Point(stocks.first.currentMarketPrice, stocks.first.timestamp),
+    List<Point> indicators = [
+      Point(stocks.first.currentMarketPrice, stocks.first.timestamp),
     ];
 
     int shortEMAPeriod = 12;
     int longEMAPeriod = 26;
 
-    List<Point> shortEMA = new EMA().compute(stocks, shortEMAPeriod, startIndex);
+    List<Point> shortEMA =
+        new EMA().compute(stocks, shortEMAPeriod, startIndex);
     List<Point> longEMA = new EMA().compute(stocks, longEMAPeriod, startIndex);
     for (int i = 0; i < stocks.length - startIndex; i++) {
       double macdValue = shortEMA[i].value - longEMA[i].value;

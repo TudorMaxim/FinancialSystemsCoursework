@@ -7,7 +7,7 @@ class EMA implements Formulae {
   @override
   List<Point> compute(List<Stock> stocks, int period, int startIndex) {
     if (stocks.length < period) {
-      throw new ErrorDescription("Period must be smaller than the number of stocks");
+      throw new ErrorDescription(Formulae.periodError);
     }
 
     if (stocks.isEmpty) return [];
@@ -18,7 +18,10 @@ class EMA implements Formulae {
       Point(stocks.first.currentMarketPrice, stocks.first.timestamp),
     ];
     for (int i = 1; i < stocks.length; i++) {
-      double currentEMA = ((stocks[i].currentMarketPrice - indicators[i - 1].value) * multiplier) + indicators[i - 1].value;
+      double currentEMA =
+          ((stocks[i].currentMarketPrice - indicators[i - 1].value) *
+                  multiplier) +
+              indicators[i - 1].value;
       indicators.add(Point(currentEMA, stocks[i].timestamp));
     }
 
