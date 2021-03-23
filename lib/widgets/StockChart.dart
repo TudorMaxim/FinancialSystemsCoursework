@@ -144,12 +144,20 @@ class StockChartState extends State<StockChart> {
         .map((entry) => Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(entry.key + ': ',
+                Expanded(
+                  child: Text(entry.key + ': ',
                     style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.blue)),
-                Text(entry.value,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Text(entry.value,
                     textAlign: TextAlign.right,
-                    style: TextStyle(fontWeight: FontWeight.bold)),
+                    style: TextStyle(fontWeight: FontWeight.bold)
+                  ),
+                ),
               ],
             ))
         .toList();

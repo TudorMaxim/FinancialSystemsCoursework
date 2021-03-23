@@ -12,6 +12,12 @@ import 'package:financial_systems_coursework/model/Stock.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+class DetailsScreenKeys {
+  static Key popupMenu = Key('PopupMenu');
+  static Key chart = Key('Chart');
+}
+
+
 class DetailsScreenArguments {
   final String period;
   final List<Stock> stocks;
@@ -116,6 +122,7 @@ class DetailsScreenState extends AppBaseState<DetailsScreen> {
           centerTitle: true,
           actions: <Widget>[
             PopupMenuButton<String>(
+                key: DetailsScreenKeys.popupMenu,
                 onSelected: handleSelectedChoices,
                 itemBuilder: (BuildContext context) => widget.graphTypes
                     .map(
@@ -148,9 +155,10 @@ class DetailsScreenState extends AppBaseState<DetailsScreen> {
       );
 
   Widget body() => Center(
-          child: Container(
+      child: Container(
         padding: EdgeInsets.all(10),
         child: StockChart(
+          key: DetailsScreenKeys.chart,
           ticker: widget.stocks.first.ticker,
           seriesList: this._getSeriesList(),
           animate: true,
