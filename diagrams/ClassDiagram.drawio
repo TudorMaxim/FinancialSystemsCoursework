@@ -1,9 +1,12 @@
-<mxfile host="app.diagrams.net" modified="2021-03-23T14:10:10.220Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Safari/605.1.15" etag="3UoZaSjm6zPibSLgxzRe" version="14.4.9" type="github">
+<mxfile host="app.diagrams.net" modified="2021-03-23T14:16:26.188Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Safari/605.1.15" etag="K6inFkBnlxWX_brbjx2U" version="14.4.9" type="github">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
     <mxGraphModel dx="1773" dy="645" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
+        <mxCell id="q58C368YSlQAS4IYxPb3-83" value="" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=80;tabHeight=20;tabPosition=left;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="-50" y="16" width="720" height="630" as="geometry" />
+        </mxCell>
         <mxCell id="q58C368YSlQAS4IYxPb3-46" value="" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=80;tabHeight=20;tabPosition=left;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="720" y="20" width="740" height="430" as="geometry" />
         </mxCell>
@@ -129,7 +132,7 @@
           <mxGeometry x="720" y="20" width="80" height="26" as="geometry" />
         </mxCell>
         <mxCell id="q58C368YSlQAS4IYxPb3-49" value="TickerManager" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
-          <mxGeometry x="120" y="100" width="320" height="160" as="geometry" />
+          <mxGeometry x="-30" y="56" width="320" height="160" as="geometry" />
         </mxCell>
         <mxCell id="q58C368YSlQAS4IYxPb3-53" value="&lt;div style=&quot;text-align: left&quot;&gt;+ tickers: Future&amp;lt;List&amp;lt;String&amp;gt;&amp;gt;&lt;/div&gt;&lt;u&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;u&gt;- _instance: TickerManager&lt;/u&gt;&lt;/div&gt;&lt;span&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;u&gt;- _tickersLocation: String&lt;/u&gt;&lt;/div&gt;&lt;/span&gt;&lt;/u&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;" vertex="1" parent="q58C368YSlQAS4IYxPb3-49">
           <mxGeometry y="26" width="320" height="50" as="geometry" />
@@ -141,7 +144,7 @@
           <mxGeometry y="84" width="320" height="76" as="geometry" />
         </mxCell>
         <mxCell id="q58C368YSlQAS4IYxPb3-55" value="StockDataProvider" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
-          <mxGeometry x="70" y="290" width="200" height="86" as="geometry" />
+          <mxGeometry x="70" y="256" width="200" height="86" as="geometry" />
         </mxCell>
         <mxCell id="q58C368YSlQAS4IYxPb3-56" value="- _instance: StockDataProvider" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=4" vertex="1" parent="q58C368YSlQAS4IYxPb3-55">
           <mxGeometry y="26" width="200" height="26" as="geometry" />
@@ -153,7 +156,7 @@
           <mxGeometry y="60" width="200" height="26" as="geometry" />
         </mxCell>
         <mxCell id="q58C368YSlQAS4IYxPb3-64" value="StockDataCollector" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
-          <mxGeometry x="310" y="287" width="340" height="174" as="geometry" />
+          <mxGeometry x="310" y="136" width="340" height="174" as="geometry" />
         </mxCell>
         <mxCell id="q58C368YSlQAS4IYxPb3-63" value="&lt;div style=&quot;text-align: left&quot;&gt;&lt;span style=&quot;text-decoration: underline&quot;&gt;- _instance: StockDataCollector&lt;/span&gt;&lt;/div&gt;&lt;span&gt;&lt;div style=&quot;text-align: left&quot;&gt;+ client: Client&lt;/div&gt;&lt;div style=&quot;text-decoration: underline ; text-align: left&quot;&gt;&lt;u&gt;- authority: String&lt;/u&gt;&lt;/div&gt;&lt;div style=&quot;text-decoration: underline ; text-align: left&quot;&gt;&lt;u&gt;- unecodePath: String&lt;/u&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left&quot;&gt;+ httpClientForTesting: Client&lt;/div&gt;&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;" vertex="1" parent="q58C368YSlQAS4IYxPb3-64">
           <mxGeometry y="26" width="340" height="80" as="geometry" />
@@ -168,13 +171,13 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="q58C368YSlQAS4IYxPb3-68" value="Client" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
-          <mxGeometry x="490" y="203" width="160" height="34" as="geometry" />
+          <mxGeometry x="400" y="49" width="160" height="34" as="geometry" />
         </mxCell>
         <mxCell id="q58C368YSlQAS4IYxPb3-70" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="q58C368YSlQAS4IYxPb3-68">
           <mxGeometry y="26" width="160" height="8" as="geometry" />
         </mxCell>
         <mxCell id="q58C368YSlQAS4IYxPb3-74" value="DBManager" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
-          <mxGeometry x="-60" y="410" width="320" height="290" as="geometry" />
+          <mxGeometry x="320" y="336" width="320" height="290" as="geometry" />
         </mxCell>
         <mxCell id="q58C368YSlQAS4IYxPb3-78" value="&lt;u&gt;- _createDBSQL: String&lt;br&gt;- _stocksTable: String&lt;br&gt;- _oneDay: int&lt;br&gt;- _instance: DBManager&lt;br&gt;&lt;/u&gt;- _db: Future&amp;lt;Database&amp;gt;&lt;br&gt;- _dbName: String&lt;br&gt;+ db: Future&amp;lt;Database&amp;gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;" vertex="1" parent="q58C368YSlQAS4IYxPb3-74">
           <mxGeometry y="26" width="320" height="100" as="geometry" />
@@ -186,7 +189,7 @@
           <mxGeometry y="134" width="320" height="156" as="geometry" />
         </mxCell>
         <mxCell id="q58C368YSlQAS4IYxPb3-79" value="StockDBEntry" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
-          <mxGeometry x="320" y="530" width="170" height="154" as="geometry" />
+          <mxGeometry x="90" y="397" width="170" height="154" as="geometry" />
         </mxCell>
         <mxCell id="q58C368YSlQAS4IYxPb3-80" value="+ id: int&#xa;+ ticker: String&#xa;+ fromTimestamp: int&#xa;+ toTimestamp: int&#xa;+ values: String&#xa;+ map: Map&lt;String, dynamic&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="q58C368YSlQAS4IYxPb3-79">
           <mxGeometry y="26" width="170" height="94" as="geometry" />
@@ -196,6 +199,9 @@
         </mxCell>
         <mxCell id="q58C368YSlQAS4IYxPb3-82" value="+ toString(): String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="q58C368YSlQAS4IYxPb3-79">
           <mxGeometry y="128" width="170" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="q58C368YSlQAS4IYxPb3-84" value="Repository" style="text;align=center;fontStyle=1;verticalAlign=middle;spacingLeft=3;spacingRight=3;strokeColor=none;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="-50" y="10" width="80" height="26" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
