@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:financial_systems_coursework/model/Stock.dart';
+
+import 'package:meta/meta.dart';
 
 /// This objects gets stored in the Database.
 /// Each StockDBEntry holds a record for a series of datapoints
@@ -65,7 +68,11 @@ class DBManager {
 
   DBManager._init() {
     WidgetsFlutterBinding.ensureInitialized();
-    _db = _initDB();
+    if (!Platform.environment.containsKey('FLUTTER_TEST')) {
+      _db = _initDB();
+    } else {
+      debugPrint('Testing!');
+    }
   }
 
   factory DBManager() {
@@ -91,13 +98,19 @@ class DBManager {
     return _db;
   }
 
+  @visibleForTesting
+  set testDB(Database db) {
+    _db = Future<Database>.value(db);
+  }
+
   /// Check if there's a cache entry for a certain ticker
   /// between two timestamps
   Future<bool> isCached(String ticker, int from, int to) async {
     StockDBEntry _entry = await _getByTicker(ticker);
     return _entry != null &&
         from >= _entry.fromTimestamp &&
-        to <= _entry.toTimestamp;
+        to <= _entry.toTimestamp &&
+        ticker == _entry.ticker;
   }
 
   Future<StockDBEntry> _getByTicker(String ticker) async {
@@ -149,11 +162,13 @@ class DBManager {
     Database db = await _db;
     await db.transaction((txn) async {
       await txn.delete(_stocksTable, where: 'ticker = \'$ticker\'');
+      return;
     });
     StockDBEntry entry = StockDBEntry(
         ticker: ticker, fromTimestamp: from, toTimestamp: to, values: values);
     await db.transaction((txn) async {
       await txn.insert(_stocksTable, entry.map);
+      return true;
     });
     debugPrint('Cache for $ticker has been refreshed.');
   }
