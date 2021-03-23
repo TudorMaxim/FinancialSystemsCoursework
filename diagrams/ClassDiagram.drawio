@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2021-03-23T15:40:28.653Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Safari/605.1.15" etag="ZOouOC8pVVPlm9IeTVvH" version="14.4.9" type="github">
+<mxfile host="app.diagrams.net" modified="2021-03-23T16:09:11.846Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Safari/605.1.15" etag="Pkp9bI39NDnO3280DifR" version="14.4.9" type="github">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
-    <mxGraphModel dx="2013" dy="795" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2199" dy="795" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
         <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
@@ -265,6 +265,60 @@
         </mxCell>
         <mxCell id="q58C368YSlQAS4IYxPb3-106" value="+ intiState(): void&#xa;+ handleFABPress(): void&#xa;+ build(): Widget&#xa;-_getInitRange(): List&lt;DateTime&gt;&#xa;- _handleTickerSubmit(ticker: String): dynamic&#xa;- _handlePeriodSubmit(period: String): dynamic&#xa;- _handleDatesSubmit(dates: List&lt;DateTime&gt;): dynamic&#xa;-_getFABStatus(): bool&#xa;-_validatePeriodLength(): bool&#xa;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="q58C368YSlQAS4IYxPb3-103">
           <mxGeometry y="274" width="310" height="136" as="geometry" />
+        </mxCell>
+        <mxCell id="q58C368YSlQAS4IYxPb3-113" value="DetailsScreenArguments" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="-1000" y="331" width="160" height="88" as="geometry" />
+        </mxCell>
+        <mxCell id="q58C368YSlQAS4IYxPb3-114" value="+ period: String&#xa;+ stocks: List&lt;Stock&gt;&#xa;+ startDate: DateTime" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="q58C368YSlQAS4IYxPb3-113">
+          <mxGeometry y="26" width="160" height="54" as="geometry" />
+        </mxCell>
+        <mxCell id="q58C368YSlQAS4IYxPb3-115" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="q58C368YSlQAS4IYxPb3-113">
+          <mxGeometry y="80" width="160" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="q58C368YSlQAS4IYxPb3-117" value="DetailsScreenRoute" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="-1180" y="334" width="160" height="86" as="geometry" />
+        </mxCell>
+        <mxCell id="q58C368YSlQAS4IYxPb3-118" value="+ routeName: String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontStyle=4" vertex="1" parent="q58C368YSlQAS4IYxPb3-117">
+          <mxGeometry y="26" width="160" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="q58C368YSlQAS4IYxPb3-119" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="q58C368YSlQAS4IYxPb3-117">
+          <mxGeometry y="52" width="160" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="q58C368YSlQAS4IYxPb3-120" value="+ build(): Widget" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="q58C368YSlQAS4IYxPb3-117">
+          <mxGeometry y="60" width="160" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="q58C368YSlQAS4IYxPb3-121" value="DetailsScreen" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="-1240" y="461" width="220" height="124" as="geometry" />
+        </mxCell>
+        <mxCell id="q58C368YSlQAS4IYxPb3-122" value="+ stocks: List&lt;Stock&gt;&#xa;+ period: String&#xa;+ startDate: DateTime&#xa;+ graphTypes: List&lt;GraphType&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="q58C368YSlQAS4IYxPb3-121">
+          <mxGeometry y="26" width="220" height="64" as="geometry" />
+        </mxCell>
+        <mxCell id="q58C368YSlQAS4IYxPb3-123" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="q58C368YSlQAS4IYxPb3-121">
+          <mxGeometry y="90" width="220" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="q58C368YSlQAS4IYxPb3-124" value="+ createState(): State&lt;StatefulWidget&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="q58C368YSlQAS4IYxPb3-121">
+          <mxGeometry y="98" width="220" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="q58C368YSlQAS4IYxPb3-132" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=-0.012;entryY=0.191;entryDx=0;entryDy=0;entryPerimeter=0;endArrow=block;endFill=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="q58C368YSlQAS4IYxPb3-125" target="q58C368YSlQAS4IYxPb3-92">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="-880" y="460" />
+              <mxPoint x="-530" y="460" />
+              <mxPoint x="-530" y="337" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="q58C368YSlQAS4IYxPb3-125" value="DetailsScreenState" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="-1030" y="626" width="290" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="q58C368YSlQAS4IYxPb3-129" value="&lt;div style=&quot;text-align: left&quot;&gt;+ selectedGraphTypes: Map&amp;lt;String, bool&amp;gt;&lt;/div&gt;&lt;u&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;u&gt;-_alertTitle: String&lt;/u&gt;&lt;/div&gt;&lt;span&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;u&gt;-_tooManyIndicators: String&lt;/u&gt;&lt;/div&gt;&lt;/span&gt;&lt;span&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;u&gt;-_tooFewIndicators: String&lt;/u&gt;&lt;/div&gt;&lt;/span&gt;&lt;span&gt;&lt;div style=&quot;text-align: left&quot;&gt;&lt;u&gt;-_detailsTitle: String&lt;/u&gt;&lt;/div&gt;&lt;/span&gt;&lt;/u&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;" vertex="1" parent="q58C368YSlQAS4IYxPb3-125">
+          <mxGeometry y="26" width="290" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="q58C368YSlQAS4IYxPb3-127" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="q58C368YSlQAS4IYxPb3-125">
+          <mxGeometry y="106" width="290" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="q58C368YSlQAS4IYxPb3-128" value="+ initState(): void&#xa;+ handleSelectedChoices(): void&#xa;+ computeStartingIndex(): int&#xa;+ build(): Widget&#xa;+ body(): Widget&#xa;- _getSeriesList(): List&lt;Series&lt;Point, DateTime&gt;&gt;&#xa;-_mapStocksToPoints(name: String): List&lt;Point&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="q58C368YSlQAS4IYxPb3-125">
+          <mxGeometry y="114" width="290" height="106" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
