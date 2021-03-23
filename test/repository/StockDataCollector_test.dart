@@ -8,7 +8,6 @@ import 'package:mockito/mockito.dart';
 
 import 'StockDataCollector_test.mocks.dart';
 
-
 @GenerateMocks([http.Client])
 void main() {
   /// Test createURL
@@ -25,10 +24,11 @@ void main() {
   /// Test getPricesAsJSON
   test('Check JSON response from web', () async {
     http.Response expectedResponse = http.Response(
-        File('test/resources/AAPL_test_response.json').readAsStringSync(), 200);
+        File('test_resources/AAPL_test_response.json').readAsStringSync(), 200);
 
     final mockClient = MockClient();
-    when(mockClient.get(any, headers: anyNamed('headers'))).thenAnswer((_) async => expectedResponse);
+    when(mockClient.get(any, headers: anyNamed('headers')))
+        .thenAnswer((_) async => expectedResponse);
     StockDataCollector().httpClientForTesting = mockClient;
 
     /// Craft expected

@@ -11,6 +11,12 @@ class SelectForm extends StatefulWidget {
 
   @override
   _SelectFormState createState() => _SelectFormState();
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    // TODO: implement toString
+    return 'SelectForm for $fieldName';
+  }
 }
 
 class _SelectFormState extends State<SelectForm> {
