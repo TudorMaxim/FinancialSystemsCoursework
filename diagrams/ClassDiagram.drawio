@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2021-03-23T14:02:42.935Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Safari/605.1.15" etag="_Echwn9OP_lyRNf8eX8x" version="14.4.9" type="github">
+<mxfile host="app.diagrams.net" modified="2021-03-23T14:10:10.220Z" agent="5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Safari/605.1.15" etag="3UoZaSjm6zPibSLgxzRe" version="14.4.9" type="github">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
     <mxGraphModel dx="1773" dy="645" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -184,6 +184,18 @@
         </mxCell>
         <mxCell id="q58C368YSlQAS4IYxPb3-77" value="+ deleteDB(): Future&lt;void&gt;&#xa;+ isCached(): Future&lt;bool&gt;&#xa;+ refrechCache(): Future&lt;void&gt;&#xa;+ printCache(): Future&lt;void&gt;&#xa;+ getFromDBOrNull(ticker: String, startDate: String, &#xa;endDate: String): Future&lt;List&lt;Stocks&gt;&gt;&#xa;- _initDB(): Future&lt;Database&gt;&#xa;- _getByTicker(ticker: String): Future&lt;StockDBEntry&gt;&#xa;- _unsafeGetFromDB(ticker: String, startDate: String, &#xa;endDate: String): Future&lt;List&lt;Stock&gt;&gt; " style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="q58C368YSlQAS4IYxPb3-74">
           <mxGeometry y="134" width="320" height="156" as="geometry" />
+        </mxCell>
+        <mxCell id="q58C368YSlQAS4IYxPb3-79" value="StockDBEntry" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="320" y="530" width="170" height="154" as="geometry" />
+        </mxCell>
+        <mxCell id="q58C368YSlQAS4IYxPb3-80" value="+ id: int&#xa;+ ticker: String&#xa;+ fromTimestamp: int&#xa;+ toTimestamp: int&#xa;+ values: String&#xa;+ map: Map&lt;String, dynamic&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="q58C368YSlQAS4IYxPb3-79">
+          <mxGeometry y="26" width="170" height="94" as="geometry" />
+        </mxCell>
+        <mxCell id="q58C368YSlQAS4IYxPb3-81" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="q58C368YSlQAS4IYxPb3-79">
+          <mxGeometry y="120" width="170" height="8" as="geometry" />
+        </mxCell>
+        <mxCell id="q58C368YSlQAS4IYxPb3-82" value="+ toString(): String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="q58C368YSlQAS4IYxPb3-79">
+          <mxGeometry y="128" width="170" height="26" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
