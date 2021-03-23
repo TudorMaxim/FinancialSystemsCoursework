@@ -131,7 +131,7 @@ class StockChartState extends State<StockChart> {
         DateTime time =
             DateTime.fromMillisecondsSinceEpoch(points.last.timestamp);
         info['Date'] = DateFormat('dd-MMM-yyyy').format(time);
-        info['Time'] = DateFormat('hh-mm a').format(time);
+        info['Time'] = DateFormat('hh:mm a').format(time);
         info[key] = '\$' + points.last.value.toStringAsFixed(2);
       }
     });

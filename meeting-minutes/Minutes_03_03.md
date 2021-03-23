@@ -3,7 +3,7 @@
 ## Date: 03/03/2021
 ## Attendees:
 - Moisi Teofana ✔
-- Balamurai, Thishaan ✔
+- Balamurali, Thishaan ✔
 - Maxim Tudor ✔
 - Pavel Simon Horia Tudor ✔
 - Anton Luca-Dorin ✔
